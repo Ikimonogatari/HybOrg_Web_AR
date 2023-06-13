@@ -5,16 +5,16 @@ import { Lens } from "@snap/camera-kit";
 import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
+import { wait } from "@testing-library/user-event/dist/utils";
 
-let mediaStream;
-
+let video;
 const SnapCamera = () => {
   const canvasRef = useRef(null);
   // camera kit api staging ashiglav
   const apiToken =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
   // lensuudiin group id
-  const lensGroupId = "a8555543-955a-464f-a578-560394df3eb0";
+  const lensGroupId = "fadde968-b380-4bcf-a006-10de7fcd75fa";
   const cameraSelectRef = useRef(null);
   const lensSelectRef = useRef(null);
 
@@ -43,16 +43,16 @@ const SnapCamera = () => {
   }, []);
   // camera kit device camera duudah function
   const setCameraKitSource = async (session, deviceId) => {
-    if (mediaStream) {
+    if (video) {
       session.pause();
-      mediaStream.getVideoTracks()[0].stop();
+      video.getVideoTracks()[0].stop();
     }
 
-    mediaStream = await navigator.mediaDevices.getUserMedia({
+    video = await navigator.mediaDevices.getUserMedia({
       video: { deviceId },
     });
 
-    const source = createMediaStreamSource(mediaStream);
+    const source = createMediaStreamSource(video);
 
     await session.setSource(source);
 
