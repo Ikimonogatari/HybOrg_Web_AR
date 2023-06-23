@@ -25,6 +25,7 @@ const CameraKit = () => {
         lensGroupId,
       ]);
       session.applyLens(lenses[19]);
+
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
       await attachLensesToSelect(lenses, session);
@@ -37,7 +38,11 @@ const CameraKit = () => {
       session.pause();
       video.getVideoTracks()[0].stop();
     }
-    video = await navigator.mediaDevices.getUserMedia({ video: { deviceId } });
+    video = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { exact: "environment" },
+      },
+    });
     const source = createMediaStreamSource(video);
     await session.setSource(source);
     source.setTransform(Transform2D.MirrorX);
