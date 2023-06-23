@@ -75,18 +75,36 @@ const CameraKit = () => {
     });
   };
   return (
-    <div className="container">
-      <canvas
-        ref={canvasRef}
-        id="canvas-container"
-        width="1920"
-        height="1080"
-      ></canvas>
-      <div className="footer">
-        <select ref={DeviceCameraType} className="styled-select"></select>
-        <select ref={SnapLenses} className="styled-select"></select>
+    <>
+      <div className='h-screen sm:h-full w-full mx-auto bg-[#0e0e0e] sm:bg-inherit container px-7 mt-0 sm:mt-[200px]'>
+        <div className='flex flex-col justify-center items-center'>
+          <canvas ref={canvasRef} className='w-screen h-screen'></canvas>
+          <img
+            src='cameraLogo.png'
+            style={{
+              position: "absolute",
+              top: 100,
+              height: "40px",
+            }}
+            className='logo'
+          />
+          <div className='flex gap-3 absolute bottom-20 sm:static sm:mt-10'>
+            <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
+              <img src='virtual.png' className='w-6 h-6 bg-transparent' />
+              <select
+                ref={DeviceCameraType}
+                className='appearance-none\ bg-transparent text-[10px] text-white'></select>
+            </div>
+            <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
+              <img src='camera.png' className='w-6 h-6 bg-transparent' />
+              <select
+                ref={SnapLenses}
+                className='appearance-none bg-transparent text-[10px] text-white'></select>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

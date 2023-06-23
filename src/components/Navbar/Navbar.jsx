@@ -13,17 +13,19 @@ function Navbar() {
   return (
     <header>
       <img src={logo} />
-      <div className="select">
+      <div className='select'>
         <nav ref={navRef}>
-          <a href="/#">Drops</a>
-          <a href="/#">Collection</a>
-          <a href="/#">More</a>
-          <a href="/#">Sign in</a>
-          <button className="nav-btn nav-close-btn" onClick={showNavbar}>
+          <a href='/#' className=''>
+            Drops
+          </a>
+          <a href='/#'>Collection</a>
+          <a href='/#'>More</a>
+          <a href='/#'>Sign in</a>
+          <button className='nav-btn nav-close-btn' onClick={showNavbar}>
             <FaTimes />
           </button>
         </nav>
-        <button className="nav-btn" onClick={showNavbar}>
+        <button className='nav-btn' onClick={showNavbar}>
           <FaBars />
         </button>
       </div>
