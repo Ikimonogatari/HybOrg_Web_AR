@@ -93,7 +93,7 @@ const CameraKit = () => {
             }}
             className='logo'
           />
-          <div className='flex gap-3 absolute bottom-20 sm:static sm:mt-10'>
+          <div className='bg-transparent flex gap-3 absolute bottom-20 sm:static sm:mt-10'>
             <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
               <img src='virtual.png' className='w-6 h-6 bg-transparent' />
               <select
