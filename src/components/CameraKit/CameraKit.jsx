@@ -39,9 +39,7 @@ const CameraKit = () => {
       video.getVideoTracks()[0].stop();
     }
     video = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { exact: "environment" },
-      },
+      video: { facingMode: "user" },
     });
     const source = createMediaStreamSource(video);
     await session.setSource(source);
