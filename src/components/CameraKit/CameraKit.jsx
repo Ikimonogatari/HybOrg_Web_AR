@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CameraKitSession } from "@snap/camera-kit";
 import { bootstrapCameraKit } from "@snap/camera-kit";
 import { Lens } from "@snap/camera-kit";
@@ -8,6 +8,20 @@ import "./CameraKit.css";
 
 let video;
 const CameraKit = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the threshold as per your needs
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
   const canvasRef = useRef(null);
   // camera kit api staging ashiglav
   const CameraKitApi =
@@ -38,9 +52,19 @@ const CameraKit = () => {
       session.pause();
       video.getVideoTracks()[0].stop();
     }
-    video = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-    });
+    if (isMobile) {
+      video = await navigator.mediaDevices.getUserMedia({
+        video: {
+          audio: true,
+          facingMode: "user",
+        },
+      });
+    } else {
+      video = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: { width: 1280, height: 720 },
+      });
+    }
     const source = createMediaStreamSource(video);
     await session.setSource(source);
     source.setTransform(Transform2D.MirrorX);
@@ -91,7 +115,7 @@ const CameraKit = () => {
             }}
             className='logo'
           />
-          <div className='bg-transparent flex gap-3 absolute bottom-20 sm:static sm:mt-10'>
+          <div className='bg-transparent flex flex-col gap-3 absolute bottom-50% right-10 sm:static sm:mt-10'>
             <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
               <img src='virtual.png' className='w-6 h-6 bg-transparent' />
               <select
