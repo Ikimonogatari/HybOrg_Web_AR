@@ -9,6 +9,10 @@ import "./CameraKit.css";
 let video;
 const CameraKit = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const videoRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -22,6 +26,7 @@ const CameraKit = () => {
       window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
+
   const canvasRef = useRef(null);
   // camera kit api staging ashiglav
   const CameraKitApi =
@@ -101,11 +106,55 @@ const CameraKit = () => {
       if (lens) session.applyLens(lens);
     });
   };
+  useEffect(() => {
+    const startRecording = () => {
+      const canvas = canvasRef.current;
+      const stream = canvas.captureStream();
+      const mimeType = "video/webm";
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
+      mediaRecorder.ondataavailable = handleDataAvailable;
+      mediaRecorder.onstop = handleStop;
+      mediaRecorder.start();
+      chunksRef.current = [];
+      mediaRecorderRef.current = mediaRecorder;
+      setRecording(true);
+    };
+
+    const stopRecording = () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+    };
+
+    const handleDataAvailable = (event) => {
+      chunksRef.current.push(event.data);
+    };
+
+    const handleStop = () => {
+      const blob = new Blob(chunksRef.current, { type: "video/webm" });
+      const url = URL.createObjectURL(blob);
+      videoRef.current.src = url;
+      setRecording(false);
+    };
+
+    const recordButton = document.getElementById("record-button");
+    const stopButton = document.getElementById("stop-button");
+
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+
+    return () => {
+      recordButton.removeEventListener("click", startRecording);
+      stopButton.removeEventListener("click", stopRecording);
+    };
+  }, []);
+
   return (
     <>
       <div className='h-screen sm:h-full w-full mx-auto bg-[#0e0e0e] sm:bg-inherit container px-7 mt-0 sm:mt-[200px]'>
         <div className='flex flex-col justify-center items-center'>
           <canvas ref={canvasRef} className='w-screen h-screen'></canvas>
+          <video controls ref={videoRef} />
           <img
             src='cameraLogo.png'
             style={{
@@ -122,6 +171,10 @@ const CameraKit = () => {
                 ref={DeviceCameraType}
                 className='appearance-none\ bg-transparent text-[10px] text-white'></select>
             </div>
+            <button id='record-button'>
+              <img src='button.png' className='bg-transparent' />
+            </button>
+            <button id='stop-button'>stop</button>
             <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
               <img src='camera.png' className='w-6 h-6 bg-transparent' />
               <select
