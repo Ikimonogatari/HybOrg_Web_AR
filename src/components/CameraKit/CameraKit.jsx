@@ -10,9 +10,6 @@ let video;
 const CameraKit = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [recording, setRecording] = useState(false);
-  const videoRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const chunksRef = useRef([]);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -28,17 +25,52 @@ const CameraKit = () => {
   }, []);
 
   const canvasRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
+  const videoRef = useRef(null);
+
   // camera kit api staging ashiglav
   const CameraKitApi =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
   const lensGroupId = "fadde968-b380-4bcf-a006-10de7fcd75fa";
   const DeviceCameraType = useRef(null);
   const SnapLenses = useRef(null);
+
+  let saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (url) {
+      a.href = url;
+      a.download = 'snap-hyborg';
+      a.click();
+      // window.URL.revokeObjectURL(url);
+    };
+  })();
+
   useEffect(() => {
     const init = async () => {
       const cameraKit = await bootstrapCameraKit({ apiToken: CameraKitApi });
       const session = await cameraKit.createSession();
       const canvas = canvasRef.current;
+
+      let videoStream = session.output.live.captureStream(30);
+      mediaRecorderRef.current = new MediaRecorder(videoStream);
+      mediaRecorderRef.current.onstop = function (e) {
+        console.log("onstop");
+        let blob = new Blob(chunksRef.current, { type: "video/mp4" });
+        chunksRef.current = [];
+        let url = URL.createObjectURL(blob);
+        console.log(url)
+        videoRef.current.src = url;
+        saveData(url);
+        // window.location.assign(url)
+      };
+
+      mediaRecorderRef.current.ondataavailable = function (e) {
+        chunksRef.current.push(e.data);
+      };
+
       if (canvas) canvas.replaceWith(session.output.live);
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
@@ -106,80 +138,50 @@ const CameraKit = () => {
       if (lens) session.applyLens(lens);
     });
   };
-  useEffect(() => {
-    const startRecording = () => {
-      const canvas = canvasRef.current;
-      const stream = canvas.captureStream();
-      const mimeType = "video/webm";
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorder.ondataavailable = handleDataAvailable;
-      mediaRecorder.onstop = handleStop;
-      mediaRecorder.start();
-      chunksRef.current = [];
-      mediaRecorderRef.current = mediaRecorder;
-      setRecording(true);
-    };
-
-    const stopRecording = () => {
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stop();
-      }
-    };
-
-    const handleDataAvailable = (event) => {
-      chunksRef.current.push(event.data);
-    };
-
-    const handleStop = () => {
-      const blob = new Blob(chunksRef.current, { type: "video/webm" });
-      const url = URL.createObjectURL(blob);
-      videoRef.current.src = url;
-      setRecording(false);
-    };
-
-    const recordButton = document.getElementById("record-button");
-    const stopButton = document.getElementById("stop-button");
-
-    recordButton.addEventListener("click", startRecording);
-    stopButton.addEventListener("click", stopRecording);
-
-    return () => {
-      recordButton.removeEventListener("click", startRecording);
-      stopButton.removeEventListener("click", stopRecording);
-    };
-  }, []);
 
   return (
     <>
-      <div className='h-screen sm:h-full w-full mx-auto bg-[#0e0e0e] sm:bg-inherit container px-7 mt-0 sm:mt-[200px]'>
-        <div className='flex flex-col justify-center items-center'>
-          <canvas ref={canvasRef} className='w-screen h-screen'></canvas>
+      <div className="h-screen sm:h-full w-full mx-auto bg-[#0e0e0e] sm:bg-inherit container px-7 mt-0 sm:mt-[200px]">
+        <div className="flex flex-col justify-center items-center">
+          <canvas ref={canvasRef} className="w-screen h-screen"></canvas>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => mediaRecorderRef.current.start()}
+              className="p-2 bg-red-200"
+            >
+              start
+            </button>
+            <button
+              onClick={() => mediaRecorderRef.current.stop()}
+              className="p-2 bg-red-200"
+            >
+              stop
+            </button>
+          </div>
           <video controls ref={videoRef} />
           <img
-            src='cameraLogo.png'
+            src="cameraLogo.png"
             style={{
               position: "absolute",
               top: 100,
               height: "40px",
             }}
-            className='logo'
+            className="logo"
           />
-          <div className='bg-transparent flex flex-col gap-3 absolute bottom-50% right-10 sm:static sm:mt-10'>
-            <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
-              <img src='virtual.png' className='w-6 h-6 bg-transparent' />
+          <div className="bg-transparent flex flex-col gap-3 absolute bottom-50% right-10 sm:static sm:mt-10">
+            <div className="px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+              <img src="virtual.png" className="w-6 h-6 bg-transparent" />
               <select
                 ref={DeviceCameraType}
-                className='appearance-none\ bg-transparent text-[10px] text-white'></select>
+                className="appearance-none\ bg-transparent text-[10px] text-white"
+              ></select>
             </div>
-            <button id='record-button'>
-              <img src='button.png' className='bg-transparent' />
-            </button>
-            <button id='stop-button'>stop</button>
-            <div className='px-2 sm:px-4 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
-              <img src='camera.png' className='w-6 h-6 bg-transparent' />
+            <div className="px-2 sm:px-4 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white">
+              <img src="camera.png" className="w-6 h-6 bg-transparent" />
               <select
                 ref={SnapLenses}
-                className='appearance-none bg-transparent text-[10px] text-white'></select>
+                className="appearance-none bg-transparent text-[10px] text-white"
+              ></select>
             </div>
           </div>
         </div>
