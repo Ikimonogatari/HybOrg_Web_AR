@@ -99,7 +99,8 @@ const CameraKit = () => {
       video = await navigator.mediaDevices.getUserMedia({
         video: {
           // audio: true,
-          facingMode: "user",
+          // facingMode: "user",
+          deviceId,
         },
       });
     } else {
