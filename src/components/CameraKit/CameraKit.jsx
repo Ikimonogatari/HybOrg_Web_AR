@@ -9,7 +9,9 @@ import "./CameraKit.css";
 let video;
 const CameraKit = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isSource, setIsSource] = useState(null);
   const [recording, setRecording] = useState(false);
+  const [isRecorded, setIsRecorded] = useState(false);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -42,7 +44,7 @@ const CameraKit = () => {
     a.style = "display: none";
     return function (url) {
       a.href = url;
-      a.download = 'snap-hyborg';
+      a.download = "snap-hyborg";
       a.click();
       // window.URL.revokeObjectURL(url);
     };
@@ -57,13 +59,15 @@ const CameraKit = () => {
       let videoStream = session.output.live.captureStream(30);
       mediaRecorderRef.current = new MediaRecorder(videoStream);
       mediaRecorderRef.current.onstop = function (e) {
-        console.log("onstop");
         let blob = new Blob(chunksRef.current, { type: "video/mp4" });
         chunksRef.current = [];
         let url = URL.createObjectURL(blob);
-        console.log(url)
+        console.log(url);
         videoRef.current.src = url;
+        setIsSource(url);
         saveData(url);
+        setIsRecorded(true);
+        setRecording(false);
         // window.location.assign(url)
       };
 
@@ -138,52 +142,114 @@ const CameraKit = () => {
       if (lens) session.applyLens(lens);
     });
   };
+  const startRecording = () => {
+    mediaRecorderRef.current.start();
+    setRecording(true);
+    console.log("Started Recording");
+    setTimeout(() => {
+      mediaRecorderRef.current.stop();
+    }, 15000);
+  };
 
+  const [remainingTime, setRemainingTime] = useState(15);
+  const [remainingTime1, setRemainingTime1] = useState(3);
+
+  useEffect(() => {
+    if (remainingTime > 0) {
+      const timer = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [remainingTime]);
+
+  const [showElement, setShowElement] = useState(false);
+  useEffect(() => {
+    if (remainingTime1 > 0) {
+      const timer1 = setInterval(() => {
+        setRemainingTime1((prevTime1) => prevTime1 - 1);
+      }, 1000);
+
+      return () => {
+        clearInterval(timer1);
+      };
+    }
+  }, [showElement]);
+  const handleClick = () => {
+    setShowElement(true);
+    // startRecording();
+    setTimeout(() => {
+      setShowElement(false);
+      startRecording();
+    }, 3000);
+  };
   return (
     <>
-      <div className="h-screen sm:h-full w-full mx-auto bg-[#0e0e0e] sm:bg-inherit container px-7 mt-0 sm:mt-[200px]">
-        <div className="flex flex-col justify-center items-center">
-          <canvas ref={canvasRef} className="w-screen h-screen"></canvas>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => mediaRecorderRef.current.start()}
-              className="p-2 bg-red-200"
-            >
-              start
-            </button>
-            <button
-              onClick={() => mediaRecorderRef.current.stop()}
-              className="p-2 bg-red-200"
-            >
-              stop
-            </button>
+      <div
+        className={`${
+          showElement ? "block" : "hidden"
+        } absolute z-50 w-screen h-screen flex justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
+        <span className='text-white font-extrabold text-5xl bg-transparent text-center'>
+          {remainingTime1}
+        </span>
+      </div>
+      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[200px]'>
+        <div className='flex flex-col justify-center items-center'>
+          <div className={isRecorded ? "hidden" : "block"}>
+            <canvas
+              ref={canvasRef}
+              className={`${
+                isRecorded ? "hidden" : "block"
+              } w-screen h-screen`}></canvas>
           </div>
-          <video controls ref={videoRef} />
-          <img
-            src="cameraLogo.png"
-            style={{
-              position: "absolute",
-              top: 100,
-              height: "40px",
-            }}
-            className="logo"
+          <video
+            controls
+            ref={videoRef}
+            className={`${
+              isRecorded ? "block" : "hidden"
+            }  w-screen h-screen z-50`}
           />
-          <div className="bg-transparent flex flex-col gap-3 absolute bottom-50% right-10 sm:static sm:mt-10">
-            <div className="px-2 sm:px-4 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
-              <img src="virtual.png" className="w-6 h-6 bg-transparent" />
-              <select
-                ref={DeviceCameraType}
-                className="appearance-none\ bg-transparent text-[10px] text-white"
-              ></select>
-            </div>
-            <div className="px-2 sm:px-4 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white">
-              <img src="camera.png" className="w-6 h-6 bg-transparent" />
-              <select
-                ref={SnapLenses}
-                className="appearance-none bg-transparent text-[10px] text-white"
-              ></select>
-            </div>
+          <div className='flex absolute top-10 right-10 items-center justify-end gap-16 bg-transparent'>
+            <img src='mbank.png' className='w-[130px] h-12 bg-transparent' />
+            <button>
+              <img src='camera.png' className='w-6 h-6 bg-transparent' />
+            </button>
           </div>
+          {!recording ? (
+            <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6'>
+              <div className='px-2 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
+                <select
+                  ref={DeviceCameraType}
+                  className='appearance-none bg-transparent text-[10px] text-white'></select>
+              </div>
+              <button
+                onClick={handleClick}
+                className={`${isRecorded ? "hidden" : "block"}`}>
+                <img
+                  src='button.png'
+                  className='w-[90px] h-[90px] bg-transparent rounded-full'
+                />
+              </button>
+              <div className='px-2 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
+                <select
+                  ref={SnapLenses}
+                  className='appearance-none bg-transparent text-[10px] text-white'></select>
+              </div>
+            </div>
+          ) : (
+            <div className='flex sm:hidden items-center justify-center absolute bottom-50% right-6 rounded-full p-2 bg-transparent backdrop-blur-sm'>
+              <img src='timerBG.png' className='absolute bg-transparent' />
+              <div
+                className='bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]'
+                role='status'></div>
+              <span className='text-white absolute bg-transparent font-bold text-3xl'>
+                {remainingTime}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </>
