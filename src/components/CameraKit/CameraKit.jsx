@@ -5,11 +5,12 @@ import { Lens } from "@snap/camera-kit";
 import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
+import { useUploadVideoMutation } from "../../api";
 
 let video;
 const CameraKit = () => {
+  const [upload, uploadResponse] = useUploadVideoMutation();
   const [isMobile, setIsMobile] = useState(false);
-  const [isSource, setIsSource] = useState(null);
   const [recording, setRecording] = useState(false);
   const [isRecorded, setIsRecorded] = useState(false);
 
@@ -25,16 +26,27 @@ const CameraKit = () => {
       window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
-
+  useEffect(() => {
+    if (uploadResponse.isError) {
+      console.log("ERROR!!!");
+      console.log(uploadResponse.error);
+      console.log("Printed ERROR!");
+    }
+    if (uploadResponse.isSuccess) {
+      console.log("SUCCESS!!!");
+    }
+  }, [uploadResponse]);
   const canvasRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
-  const videoRef = useRef(null);
+  // const videoRef = useRef(null);
 
   // camera kit api staging ashiglav
   const CameraKitApi =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
-  const lensGroupId = "fadde968-b380-4bcf-a006-10de7fcd75fa";
+  // const lensGroupId = "fadde968-b380-4bcf-a006-10de7fcd75fa";
+  const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
+
   const DeviceCameraType = useRef(null);
   const SnapLenses = useRef(null);
 
@@ -49,6 +61,21 @@ const CameraKit = () => {
       // window.URL.revokeObjectURL(url);
     };
   })();
+  // const handleUpload = async (blob) => {
+  //   try {
+  //     const file = new File([blob], "video.mp4", { type: "video/mp4" });
+  //     await upload({ file });
+  //     console.log("Upload successful!");
+  //   } catch (error) {
+  //     console.error("Upload failed:", error);
+  //   }
+  // };
+  // const handleStopRecording = () => {
+  //   const blob = new Blob(chunksRef.current, { type: "video/webm" });
+  //   setIsRecorded(true);
+  //   handleUpload(blob);
+  //   chunksRef.current = [];
+  // };
 
   useEffect(() => {
     const init = async () => {
@@ -59,17 +86,52 @@ const CameraKit = () => {
       let videoStream = session.output.live.captureStream(30);
       mediaRecorderRef.current = new MediaRecorder(videoStream);
       mediaRecorderRef.current.onstop = function (e) {
+        console.log(chunksRef.current);
         let blob = new Blob(chunksRef.current, { type: "video/mp4" });
+        const file = new File([blob], "video.mp4", {
+          type: "video/mp4",
+        });
+        console.log(file);
+        console.log("INITIALIZED");
         chunksRef.current = [];
-        let url = URL.createObjectURL(blob);
-        console.log(url);
-        videoRef.current.src = url;
-        setIsSource(url);
-        saveData(url);
+        // let url = URL.createObjectURL(blob);
+        // console.log(url);
+        // videoRef.current.src = url;
+        // saveData(url);
+        upload({ file });
+
         setIsRecorded(true);
         setRecording(false);
         // window.location.assign(url)
       };
+      // const sendVideoToEndpoint = async () => {
+      //   const url = "https://nest-api.hyborg.world/upload";
+
+      //   // Create a FormData object
+      //   const formData = new FormData();
+      //   let blob = new Blob(chunksRef.current, { type: "video/mp4" });
+      //   // Append the Blob data to the FormData object
+      //   formData.append("video", blob, "video.mp4");
+
+      //   // Send the POST request
+      //   try {
+      //     const response = await fetch(url, {
+      //       method: "POST",
+      //       body: formData,
+      //     });
+
+      //     // Handle the response
+      //     if (response.ok) {
+      //       console.log("Video upload successful");
+      //     } else {
+      //       console.error("Video upload failed");
+      //       console.log(response);
+      //     }
+      //   } catch (error) {
+      //     console.error("An error occurred while uploading the video", error);
+      //   }
+      // };
+      // sendVideoToEndpoint();
 
       mediaRecorderRef.current.ondataavailable = function (e) {
         chunksRef.current.push(e.data);
@@ -81,7 +143,7 @@ const CameraKit = () => {
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
       ]);
-      session.applyLens(lenses[19]);
+      session.applyLens(lenses[8]);
 
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
@@ -155,6 +217,7 @@ const CameraKit = () => {
     console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
+      // handleStopRecording();
     }, 16000);
   };
 
@@ -212,13 +275,13 @@ const CameraKit = () => {
                 isRecorded ? "hidden" : "block"
               } w-screen h-screen`}></canvas>
           </div>
-          <video
+          {/* <video
             controls
             ref={videoRef}
             className={`${
               isRecorded ? "block" : "hidden"
             }  w-screen h-screen z-50`}
-          />
+          /> */}
           <div className='flex absolute top-[104px] sm:top-10 items-center justify-center gap-16 bg-transparent'>
             <img
               src='mbank.png'
