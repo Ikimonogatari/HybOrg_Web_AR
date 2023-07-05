@@ -203,14 +203,14 @@ const CameraKit = () => {
           {remainingTime1}
         </span>
       </div> */}
-      <div className='relative h-full sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[100px]'>
+      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-20 sm:mt-[100px]'>
         <div className='flex flex-col justify-center items-center'>
           <div className={isRecorded ? "hidden" : "block"}>
             <canvas
               ref={canvasRef}
               className={`${
                 isRecorded ? "hidden" : "block"
-              } w-full h-full`}></canvas>
+              } w-screen h-screen`}></canvas>
           </div>
           <video
             controls
