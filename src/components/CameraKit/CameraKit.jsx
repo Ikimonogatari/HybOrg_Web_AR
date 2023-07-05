@@ -73,6 +73,8 @@ const CameraKit = () => {
 
       mediaRecorderRef.current.ondataavailable = function (e) {
         chunksRef.current.push(e.data);
+        console.log("Pushing data");
+        console.log(e.data);
       };
 
       if (canvas) canvas.replaceWith(session.output.live);
@@ -96,13 +98,13 @@ const CameraKit = () => {
     if (isMobile) {
       video = await navigator.mediaDevices.getUserMedia({
         video: {
-          audio: true,
+          // audio: true,
           facingMode: "user",
         },
       });
     } else {
       video = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        // audio: true,
         video: {
           width: 1280,
           height: 720,
