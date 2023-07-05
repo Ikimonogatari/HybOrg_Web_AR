@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <header>
       <img src={logo} />
-      <div className='select'>
+      {/* <div className='select'>
         <nav ref={navRef}>
           <a href='/#' className=''>
             Drops
@@ -28,7 +28,7 @@ function Navbar() {
         <button className='nav-btn' onClick={showNavbar}>
           <FaBars />
         </button>
-      </div>
+      </div> */}
     </header>
   );
 }

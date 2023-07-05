@@ -103,11 +103,16 @@ const CameraKit = () => {
     } else {
       video = await navigator.mediaDevices.getUserMedia({
         audio: true,
-        video: { width: 1280, height: 720 },
+        video: {
+          width: 1280,
+          height: 720,
+          // deviceId,
+        },
       });
     }
     const source = createMediaStreamSource(video);
     await session.setSource(source);
+
     source.setTransform(Transform2D.MirrorX);
     session.play();
   };
@@ -148,11 +153,11 @@ const CameraKit = () => {
     console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
-    }, 15000);
+    }, 16000);
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-  const [remainingTime1, setRemainingTime1] = useState(3);
+  // const [remainingTime1, setRemainingTime1] = useState(3);
 
   useEffect(() => {
     if (remainingTime > 0) {
@@ -166,37 +171,37 @@ const CameraKit = () => {
     }
   }, [remainingTime]);
 
-  const [showElement, setShowElement] = useState(false);
-  useEffect(() => {
-    if (remainingTime1 > 0) {
-      const timer1 = setInterval(() => {
-        setRemainingTime1((prevTime1) => prevTime1 - 1);
-      }, 1000);
+  // const [showElement, setShowElement] = useState(false);
+  // useEffect(() => {
+  //   if (remainingTime1 > 0) {
+  //     const timer1 = setInterval(() => {
+  //       setRemainingTime1((prevTime1) => prevTime1 - 1);
+  //     }, 1000);
 
-      return () => {
-        clearInterval(timer1);
-      };
-    }
-  }, [showElement]);
+  //     return () => {
+  //       clearInterval(timer1);
+  //     };
+  //   }
+  // }, [showElement]);
   const handleClick = () => {
-    setShowElement(true);
-    // startRecording();
-    setTimeout(() => {
-      setShowElement(false);
-      startRecording();
-    }, 3000);
+    // setShowElement(true);
+    startRecording();
+    // setTimeout(() => {
+    //   setShowElement(false);
+    //   startRecording();
+    // }, 3000);
   };
   return (
     <>
-      <div
+      {/* <div
         className={`${
           showElement ? "block" : "hidden"
         } absolute z-50 w-screen h-screen flex justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
         <span className='text-white font-extrabold text-5xl bg-transparent text-center'>
           {remainingTime1}
         </span>
-      </div>
-      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[200px]'>
+      </div> */}
+      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[100px]'>
         <div className='flex flex-col justify-center items-center'>
           <div className={isRecorded ? "hidden" : "block"}>
             <canvas
@@ -212,14 +217,20 @@ const CameraKit = () => {
               isRecorded ? "block" : "hidden"
             }  w-screen h-screen z-50`}
           />
-          <div className='flex absolute top-10 right-10 items-center justify-end gap-16 bg-transparent'>
-            <img src='mbank.png' className='w-[130px] h-12 bg-transparent' />
-            <button>
-              <img src='camera.png' className='w-6 h-6 bg-transparent' />
-            </button>
+          <div className='flex absolute top-[104px] sm:top-10 items-center justify-center gap-16 bg-transparent'>
+            <img
+              src='mbank.png'
+              className='w-[130px] sm:w-[180px] h-12 sm:h-auto  bg-transparent'
+            />
           </div>
+          <button className='flex absolute top-[112px] sm:top-[52px] right-10 xl:right-[220px]'>
+            <img
+              src='camera.png'
+              className='w-7 h-7 sm:w-10 sm:h-10 bg-transparent'
+            />
+          </button>
           {!recording ? (
-            <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6'>
+            <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]'>
               <div className='px-2 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
                 <select
                   ref={DeviceCameraType}
@@ -240,8 +251,11 @@ const CameraKit = () => {
               </div>
             </div>
           ) : (
-            <div className='flex sm:hidden items-center justify-center absolute bottom-50% right-6 rounded-full p-2 bg-transparent backdrop-blur-sm'>
-              <img src='timerBG.png' className='absolute bg-transparent' />
+            <div className='flex items-center justify-center absolute bottom-50% right-6 sm:right-[200px] rounded-full p-2 bg-transparent backdrop-blur-sm'>
+              <img
+                src='timerBG.png'
+                className='absolute bg-transparent w-[90px] h-[90px]'
+              />
               <div
                 className='bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]'
                 role='status'></div>
