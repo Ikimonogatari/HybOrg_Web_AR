@@ -211,7 +211,7 @@ const CameraKit = () => {
               ref={canvasRef}
               className={`${
                 isRecorded ? "hidden" : "block"
-              } w-screen h-screen`}></canvas>
+              } w-screen h-full`}></canvas>
           </div>
           <video
             controls
