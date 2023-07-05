@@ -99,8 +99,7 @@ const CameraKit = () => {
       video = await navigator.mediaDevices.getUserMedia({
         video: {
           // audio: true,
-          // facingMode: "user",
-          deviceId,
+          facingMode: "user",
         },
       });
     } else {
@@ -186,14 +185,14 @@ const CameraKit = () => {
   //     };
   //   }
   // }, [showElement]);
-  const handleClick = () => {
-    // setShowElement(true);
-    startRecording();
-    // setTimeout(() => {
-    //   setShowElement(false);
-    //   startRecording();
-    // }, 3000);
-  };
+  // const handleClick = () => {
+  //   // setShowElement(true);
+  //   startRecording();
+  //   // setTimeout(() => {
+  //   //   setShowElement(false);
+  //   //   startRecording();
+  //   // }, 3000);
+  // };
   return (
     <>
       {/* <div
@@ -204,14 +203,14 @@ const CameraKit = () => {
           {remainingTime1}
         </span>
       </div> */}
-      <div className='relative h-full sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[100px]'>
+      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container mt-0 sm:mt-[100px]'>
         <div className='flex flex-col justify-center items-center'>
           <div className={isRecorded ? "hidden" : "block"}>
             <canvas
               ref={canvasRef}
               className={`${
                 isRecorded ? "hidden" : "block"
-              } w-screen h-full`}></canvas>
+              } w-screen h-screen`}></canvas>
           </div>
           <video
             controls
@@ -240,7 +239,7 @@ const CameraKit = () => {
                   className='appearance-none bg-transparent text-[10px] text-white'></select>
               </div>
               <button
-                onClick={handleClick}
+                onClick={startRecording}
                 className={`${isRecorded ? "hidden" : "block"}`}>
                 <img
                   src='button.png'
