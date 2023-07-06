@@ -61,9 +61,8 @@ const CameraKit = () => {
   })();
   const handleUpload = async (blob) => {
     try {
-      const file = new File([blob], "video/webm", { type: "video/webm" });
-      console.log(file);
-      await upload({ file: file });
+      const file = new File([blob], "video/webm", { type: "video/mp4" });
+      await upload({ file });
       console.log("Upload successful!");
     } catch (error) {
       console.error("Upload failed:", error);
@@ -185,7 +184,7 @@ const CameraKit = () => {
     }, 16000);
   };
 
-  const [remainingTime, setRemainingTime] = useState(16);
+  const [remainingTime, setRemainingTime] = useState(15);
   // const [remainingTime1, setRemainingTime1] = useState(3);
 
   useEffect(() => {
