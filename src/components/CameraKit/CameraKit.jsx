@@ -195,7 +195,7 @@ const CameraKit = () => {
     }, 16000);
   };
 
-  const [remainingTime, setRemainingTime] = useState(15);
+  const [remainingTime, setRemainingTime] = useState(17);
   // const [remainingTime1, setRemainingTime1] = useState(3);
 
   useEffect(() => {
