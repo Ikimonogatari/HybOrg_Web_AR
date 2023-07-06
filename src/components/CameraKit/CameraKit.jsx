@@ -7,6 +7,7 @@ import { useUploadVideoMutation } from "../../api";
 
 let video;
 const CameraKit = () => {
+  const [frontCamera, setFrontCamera] = useState(true);
   const [upload, uploadResponse] = useUploadVideoMutation();
   const [isMobile, setIsMobile] = useState(false);
   const [recording, setRecording] = useState(false);
@@ -132,12 +133,19 @@ const CameraKit = () => {
       video.getVideoTracks()[0].stop();
     }
     if (isMobile) {
-      video = await navigator.mediaDevices.getUserMedia({
-        video: {
-          // audio: true,
-          facingMode: "user",
-        },
-      });
+      frontCamera
+        ? (video = await navigator.mediaDevices.getUserMedia({
+            video: {
+              // audio: true,
+              facingMode: "user",
+            },
+          }))
+        : (video = await navigator.mediaDevices.getUserMedia({
+            video: {
+              // audio: true,
+              facingMode: "environment",
+            },
+          }));
     } else {
       video = await navigator.mediaDevices.getUserMedia({
         // audio: true,
@@ -236,13 +244,15 @@ const CameraKit = () => {
               isRecorded ? "block" : "hidden"
             }  w-screen h-screen z-50`}
           /> */}
-          <div className='flex absolute top-[104px] sm:top-10 items-center justify-center gap-16 bg-transparent'>
+          {/* <div className='flex absolute top-[104px] sm:top-10 items-center justify-center gap-16 bg-transparent'>
             <img
               src='mbank.png'
               className='w-[130px] sm:w-[180px] h-12 sm:h-auto  bg-transparent'
             />
-          </div>
-          <button className='flex absolute top-[112px] sm:top-[52px] right-10 xl:right-[220px]'>
+          </div> */}
+          <button
+            onClick={() => setFrontCamera(false)}
+            className='flex absolute top-[112px] sm:top-[52px] right-10 xl:right-[220px]'>
             <img
               src='camera.png'
               className='w-7 h-7 sm:w-10 sm:h-10 bg-transparent'
