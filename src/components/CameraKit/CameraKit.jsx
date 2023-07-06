@@ -72,6 +72,7 @@ const CameraKit = () => {
         // videoRef.current.src = url;
         // saveData();
         setRecording(false);
+        setRemainingTime(15);
       };
 
       mediaRecorderRef.current.ondataavailable = function (e) {
@@ -164,6 +165,7 @@ const CameraKit = () => {
   const handleClick = () => {
     if (show) {
       setShow(false);
+      window.location.reload();
     } else {
       setShow(true);
     }
@@ -227,10 +229,16 @@ const CameraKit = () => {
                 show ? "block" : "hidden"
               } absolute z-50 w-screen h-screen flex gap-6 justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
               <button onClick={handleClick} className=''>
-                <img src='button2.png' className='w-16 h-16 rounded-2xl' />
+                <img
+                  src='button2.png'
+                  className='w-16 h-16 rounded-2xl bg-transparent'
+                />
               </button>
               <button onClick={handleClick1} className=''>
-                <img src='button1.png' className='w-16 h-16 rounded-2xl' />
+                <img
+                  src='button1.png'
+                  className='w-16 h-16 rounded-2xl bg-transparent'
+                />
               </button>
             </div>
             <div
@@ -239,7 +247,8 @@ const CameraKit = () => {
               } px-7 flex flex-col gap-10 justify-center items-center`}>
               <div className='absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center'>
                 <img src='Frame.png' className='w-[92px] h-[26px]' />
-                <button onClick={() => setShow1(false)}>
+                <button
+                  onClick={() => (setShow1(false), window.location.reload())}>
                   <img src='Fab.png' className='w-10 h-10' />
                 </button>
               </div>
