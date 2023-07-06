@@ -32,13 +32,18 @@ const CameraKit = () => {
     if (uploadResponse.isSuccess) {
       console.log("SUCCESS!!!");
       console.log(uploadResponse.data);
+      const img = new Image();
+      img.src = uploadResponse.data.qrImage;
+      img.onload = () => {
+        imageRef.current.src = img.src;
+      };
     }
   }, [uploadResponse]);
   const canvasRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const imageRef = useRef(null);
   // const videoRef = useRef(null);
-
   // camera kit api staging ashiglav
   const CameraKitApi =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
@@ -209,14 +214,14 @@ const CameraKit = () => {
           {remainingTime1}
         </span>
       </div> */}
-      <div className='relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container sm:mt-[100px]'>
-        <div className='flex flex-col justify-center items-center'>
+      <div
+        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container sm:mt-[100px]`}>
+        <div
+          className={`${
+            isRecorded ? "hidden" : "block"
+          } flex flex-col justify-center items-center`}>
           <div className={isRecorded ? "hidden" : "block"}>
-            <canvas
-              ref={canvasRef}
-              className={`${
-                isRecorded ? "hidden" : "block"
-              } w-screen h-screen`}></canvas>
+            <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           </div>
           {/* <video
             controls
@@ -239,7 +244,7 @@ const CameraKit = () => {
           </button>
           {!recording ? (
             <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]'>
-              <div className='px-2 py-2 flex items-center gap-1 w-2/3 sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
+              <div className='px-2 py-2 flex items-center gap-1 w-auto sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
                 <select
                   ref={DeviceCameraType}
                   className='appearance-none bg-transparent text-[10px] text-white'></select>
@@ -273,6 +278,17 @@ const CameraKit = () => {
             </div>
           )}
         </div>
+        {uploadResponse.isSuccess ? (
+          <div className='px-7 flex flex-col gap-10 justify-center items-center'>
+            <span className='text-white font-bold text-center text-2xl '>
+              QR кодыг уншуулаад өөрийн бичлэгээ аваарай.
+            </span>
+            <img ref={imageRef} alt='QR Code' className='w-[173px] h-[173px]' />
+            <span className='text-white font-bold text-center text-2xl'>
+              @hyb_org @mbankmongolia Mention хийгээрэй
+            </span>
+          </div>
+        ) : null}
       </div>
     </>
   );
