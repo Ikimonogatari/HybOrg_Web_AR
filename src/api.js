@@ -4,9 +4,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const hyborgApi = createApi({
   reducerPath: "hyborgApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
+    baseUrl:
+      // `${process.env.NEXT_PUBLIC_API_URL}`,
+      `https://nest-api.hyborg.world`,
   }),
-  tagTypes: ["profile"],
+  tagTypes: ["qrimage"],
   endpoints: (builder) => ({
     uploadVideo: builder.mutation({
       invalidatesTags: ["qrimage"],
