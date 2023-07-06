@@ -66,7 +66,7 @@ const CameraKit = () => {
   })();
   const handleUpload = async (blob) => {
     try {
-      const file = new File([blob], "video/webm", { type: "video/mp4" });
+      const file = new File([blob], "video/mp4", { type: "video/mp4" });
       await upload({ file });
       console.log("Upload successful!");
     } catch (error) {
@@ -74,7 +74,7 @@ const CameraKit = () => {
     }
   };
   const handleStopRecording = () => {
-    const blob = new Blob(chunksRef.current, { type: "video/webm" });
+    const blob = new Blob(chunksRef.current, { type: "video/mp4" });
     setIsRecorded(true);
     handleUpload(blob);
     chunksRef.current = [];
