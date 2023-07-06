@@ -125,7 +125,7 @@ const CameraKit = () => {
       await attachLensesToSelect(lenses, session);
     };
     init();
-  }, []);
+  }, [frontCamera]);
   // camera kit device camera duudah function
   const setCameraKitSource = async (session, deviceId) => {
     if (video) {
@@ -143,7 +143,7 @@ const CameraKit = () => {
         : (video = await navigator.mediaDevices.getUserMedia({
             video: {
               // audio: true,
-              facingMode: "environment",
+              exact: "environment",
             },
           }));
     } else {
@@ -221,6 +221,7 @@ const CameraKit = () => {
     if (frontCamera) {
       setFrontCamera(false);
     } else setFrontCamera(true);
+    console.log("CHANGED");
   };
   return (
     <>
@@ -277,7 +278,7 @@ const CameraKit = () => {
                   className='w-[90px] h-[90px] bg-transparent rounded-full'
                 />
               </button>
-              <div className='px-2 py-2 flex items-center gap-1 w-1/2 sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
+              <div className='px-2 py-2 flex items-center gap-1 w-auto sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
                 <select
                   ref={SnapLenses}
                   className='appearance-none bg-transparent text-[10px] text-white'></select>
