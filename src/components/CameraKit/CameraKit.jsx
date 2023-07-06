@@ -217,7 +217,11 @@ const CameraKit = () => {
       };
     }
   }, [remainingTime]);
-
+  const handleClick = () => {
+    if (frontCamera) {
+      setFrontCamera(false);
+    } else setFrontCamera(true);
+  };
   return (
     <>
       {/* <div
@@ -251,7 +255,7 @@ const CameraKit = () => {
             />
           </div> */}
           <button
-            onClick={() => setFrontCamera(false)}
+            onClick={() => handleClick}
             className='flex absolute top-[112px] sm:top-[52px] right-10 xl:right-[220px]'>
             <img
               src='camera.png'
