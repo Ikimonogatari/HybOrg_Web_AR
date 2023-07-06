@@ -132,30 +132,30 @@ const CameraKit = () => {
       session.pause();
       video.getVideoTracks()[0].stop();
     }
-    if (isMobile) {
-      frontCamera
-        ? (video = await navigator.mediaDevices.getUserMedia({
-            video: {
-              // audio: true,
-              facingMode: "user",
-            },
-          }))
-        : (video = await navigator.mediaDevices.getUserMedia({
-            video: {
-              // audio: true,
-              exact: "environment",
-            },
-          }));
-    } else {
-      video = await navigator.mediaDevices.getUserMedia({
-        // audio: true,
-        video: {
-          width: 1280,
-          height: 720,
-          // deviceId,
-        },
-      });
-    }
+    // if (isMobile) {
+    //   frontCamera
+    //     ? (video = await navigator.mediaDevices.getUserMedia({
+    //         video: {
+    //           // audio: true,
+    //           facingMode: "user",
+    //         },
+    //       }))
+    //     : (video = await navigator.mediaDevices.getUserMedia({
+    //         video: {
+    //           // audio: true,
+    //           exact: "environment",
+    //         },
+    //       }));
+    // } else {
+    video = await navigator.mediaDevices.getUserMedia({
+      // audio: true,
+      video: {
+        width: 1280,
+        height: 720,
+        // deviceId,
+      },
+    });
+    // }
     const source = createMediaStreamSource(video);
     await session.setSource(source);
 
