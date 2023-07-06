@@ -64,23 +64,23 @@ const CameraKit = () => {
       // window.URL.revokeObjectURL(url);
     };
   })();
-  const handleUpload = async (blob) => {
-    try {
-      const file = new File([blob], "video/mp4", { type: "video/mp4" });
-      await upload({ file });
-      console.log(file);
-      console.log("Upload successful!");
-    } catch (error) {
-      console.error("Upload failed:", error);
-    }
-  };
-  const handleStopRecording = () => {
-    const blob = new Blob(chunksRef.current, { type: "video/mp4" });
-    console.log(blob);
-    setIsRecorded(true);
-    handleUpload(blob);
-    chunksRef.current = [];
-  };
+  // const handleUpload = async (blob) => {
+  //   try {
+  //     const file = new File([blob], "video/mp4", { type: "video/mp4" });
+  //     await upload({ file });
+  //     console.log(file);
+  //     console.log("Upload successful!");
+  //   } catch (error) {
+  //     console.error("Upload failed:", error);
+  //   }
+  // };
+  // const handleStopRecording = () => {
+  //   const blob = new Blob(chunksRef.current, { type: "video/mp4" });
+  //   console.log(blob);
+  //   setIsRecorded(true);
+  //   handleUpload(blob);
+  //   chunksRef.current = [];
+  // };
 
   useEffect(() => {
     const init = async () => {
@@ -92,7 +92,11 @@ const CameraKit = () => {
       mediaRecorderRef.current = new MediaRecorder(videoStream);
       mediaRecorderRef.current.onstop = function (e) {
         console.log(chunksRef.current);
-
+        let blob = new Blob(chunksRef.current, { type: "video/mp4" });
+        const file = new File([blob], "video.mp4", { type: "video/mp4" });
+        chunksRef.current = [];
+        console.log(file);
+        upload({ file });
         // let url = URL.createObjectURL(blob);
         // console.log(url);
         // videoRef.current.src = url;
@@ -186,8 +190,8 @@ const CameraKit = () => {
     setRecording(true);
     console.log("Started Recording");
     setTimeout(() => {
-      // mediaRecorderRef.current.stop();
-      handleStopRecording();
+      mediaRecorderRef.current.stop();
+      // handleStopRecording();
     }, 16000);
   };
 
