@@ -7,24 +7,11 @@ import { useUploadVideoMutation } from "../../api";
 
 let video;
 const CameraKit = () => {
-  const [frontCamera, setFrontCamera] = useState(true);
+  const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadVideoMutation();
-  const [isMobile, setIsMobile] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [isRecorded, setIsRecorded] = useState(false);
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust the threshold as per your needs
-    };
-
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkIsMobile);
-    };
-  }, []);
   useEffect(() => {
     if (uploadResponse.isError) {
       console.log("ERROR!!!");
@@ -38,50 +25,32 @@ const CameraKit = () => {
       img.onload = () => {
         imageRef.current.src = img.src;
       };
+      setShow(true);
     }
   }, [uploadResponse]);
   const canvasRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const imageRef = useRef(null);
-  // const videoRef = useRef(null);
   // camera kit api staging ashiglav
   const CameraKitApi =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
-  // const lensGroupId = "fadde968-b380-4bcf-a006-10de7fcd75fa";
   const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
 
   const DeviceCameraType = useRef(null);
   const SnapLenses = useRef(null);
 
-  let saveData = (function () {
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    return function (url) {
-      a.href = url;
-      a.download = "snap-hyborg";
-      a.click();
-      // window.URL.revokeObjectURL(url);
-    };
-  })();
-  // const handleUpload = async (blob) => {
-  //   try {
-  //     const file = new File([blob], "video/mp4", { type: "video/mp4" });
-  //     await upload({ file });
-  //     console.log(file);
-  //     console.log("Upload successful!");
-  //   } catch (error) {
-  //     console.error("Upload failed:", error);
-  //   }
-  // };
-  // const handleStopRecording = () => {
-  //   const blob = new Blob(chunksRef.current, { type: "video/mp4" });
-  //   console.log(blob);
-  //   setIsRecorded(true);
-  //   handleUpload(blob);
-  //   chunksRef.current = [];
-  // };
+  // let saveData = (function () {
+  //   var a = document.createElement("a");
+  //   document.body.appendChild(a);
+  //   a.style = "display: none";
+  //   return function (url) {
+  //     a.href = url;
+  //     a.download = "snap-hyborg";
+  //     a.click();
+  //     // window.URL.revokeObjectURL(url);
+  //   };
+  // })();
 
   useEffect(() => {
     const init = async () => {
@@ -102,10 +71,7 @@ const CameraKit = () => {
         // console.log(url);
         // videoRef.current.src = url;
         // saveData();
-
-        setIsRecorded(true);
         setRecording(false);
-        // window.location.assign(url)
       };
 
       mediaRecorderRef.current.ondataavailable = function (e) {
@@ -125,33 +91,15 @@ const CameraKit = () => {
       await attachLensesToSelect(lenses, session);
     };
     init();
-  }, [frontCamera]);
+  }, []);
   // camera kit device camera duudah function
   const setCameraKitSource = async (session, deviceId) => {
     if (video) {
       session.pause();
       video.getVideoTracks()[0].stop();
     }
-    // if (isMobile) {
-    //   frontCamera
-    //     ? (video = await navigator.mediaDevices.getUserMedia({
-    //         video: {
-    //           // audio: true,
-    //           facingMode: "user",
-    //         },
-    //       }))
-    //     : (video = await navigator.mediaDevices.getUserMedia({
-    //         video: {
-    //           // audio: true,
-    //           exact: "environment",
-    //         },
-    //       }));
-    // } else {
     video = await navigator.mediaDevices.getUserMedia({
-      // audio: true,
       video: {
-        // width: 1280,
-        // height: 720,
         deviceId,
       },
     });
@@ -199,14 +147,7 @@ const CameraKit = () => {
     console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
-      // handleStopRecording();
     }, 16000);
-  };
-
-  const [remainingTime, setRemainingTime] = useState(17);
-  // const [remainingTime1, setRemainingTime1] = useState(3);
-
-  useEffect(() => {
     if (remainingTime > 0) {
       const timer = setInterval(() => {
         setRemainingTime((prevTime) => prevTime - 1);
@@ -216,53 +157,35 @@ const CameraKit = () => {
         clearInterval(timer);
       };
     }
-  }, [remainingTime]);
-  const handleClick = () => {
-    if (frontCamera) {
-      setFrontCamera(false);
-    } else setFrontCamera(true);
-    console.log("CHANGED");
   };
+
+  const [remainingTime, setRemainingTime] = useState(15);
+
+  const handleClick = () => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  };
+  const handleClick1 = () => {
+    if (show1) {
+      setShow1(false);
+    } else {
+      setShow(false);
+      setShow1(true);
+    }
+  };
+
   return (
     <>
-      {/* <div
-        className={`${
-          showElement ? "block" : "hidden"
-        } absolute z-50 w-screen h-screen flex justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
-        <span className='text-white font-extrabold text-5xl bg-transparent text-center'>
-          {remainingTime1}
-        </span>
-      </div> */}
       <div
         className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container sm:mt-[100px]`}>
         <div
           className={`${
-            isRecorded ? "hidden" : "block"
+            show1 ? "hidden" : "block"
           } flex flex-col justify-center items-center`}>
-          <div className={isRecorded ? "hidden" : "block"}>
-            <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
-          </div>
-          {/* <video
-            controls
-            ref={videoRef}
-            className={`${
-              isRecorded ? "block" : "hidden"
-            }  w-screen h-screen z-50`}
-          /> */}
-          {/* <div className='flex absolute top-[104px] sm:top-10 items-center justify-center gap-16 bg-transparent'>
-            <img
-              src='mbank.png'
-              className='w-[130px] sm:w-[180px] h-12 sm:h-auto  bg-transparent'
-            />
-          </div> */}
-          <button
-            onClick={() => handleClick}
-            className='flex absolute top-[112px] sm:top-[52px] right-10 xl:right-[220px]'>
-            <img
-              src='camera.png'
-              className='w-7 h-7 sm:w-10 sm:h-10 bg-transparent'
-            />
-          </button>
+          <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
             <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]'>
               <div className='px-2 py-2 flex items-center gap-1 w-auto sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
@@ -270,9 +193,7 @@ const CameraKit = () => {
                   ref={DeviceCameraType}
                   className='appearance-none bg-transparent text-[10px] text-white'></select>
               </div>
-              <button
-                onClick={startRecording}
-                className={`${isRecorded ? "hidden" : "block"}`}>
+              <button onClick={startRecording}>
                 <img
                   src='button.png'
                   className='w-[90px] h-[90px] bg-transparent rounded-full'
@@ -300,15 +221,41 @@ const CameraKit = () => {
           )}
         </div>
         {uploadResponse.isSuccess ? (
-          <div className='px-7 flex flex-col gap-10 justify-center items-center'>
-            <span className='text-white font-bold text-center text-2xl '>
-              QR кодыг уншуулаад өөрийн бичлэгээ аваарай.
-            </span>
-            <img ref={imageRef} alt='QR Code' className='w-[173px] h-[173px]' />
-            <span className='text-white font-bold text-center text-2xl'>
-              @hyb_org @mbankmongolia Mention хийгээрэй
-            </span>
-          </div>
+          <>
+            <div
+              className={`${
+                show ? "block" : "hidden"
+              } absolute z-50 w-screen h-screen flex gap-6 justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
+              <button onClick={handleClick} className=''>
+                <img src='button2.png' className='w-16 h-16 rounded-2xl' />
+              </button>
+              <button onClick={handleClick1} className=''>
+                <img src='button1.png' className='w-16 h-16 rounded-2xl' />
+              </button>
+            </div>
+            <div
+              className={`${
+                show1 ? "block" : "hidden"
+              } px-7 flex flex-col gap-10 justify-center items-center`}>
+              <div className='absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center'>
+                <img src='Frame.png' className='w-[92px] h-[26px]' />
+                <button onClick={() => setShow1(false)}>
+                  <img src='Fab.png' className='w-10 h-10' />
+                </button>
+              </div>
+              <span className='text-white font-bold text-center text-2xl '>
+                QR кодыг уншуулаад өөрийн бичлэгээ аваарай.
+              </span>
+              <img
+                ref={imageRef}
+                alt='QR Code'
+                className='w-[173px] h-[173px]'
+              />
+              <span className='text-white font-bold text-center text-2xl'>
+                @hyb_org @mbankmongolia Mention хийгээрэй
+              </span>
+            </div>
+          </>
         ) : null}
       </div>
     </>
