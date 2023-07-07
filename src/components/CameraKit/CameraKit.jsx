@@ -93,6 +93,7 @@ const CameraKit = () => {
     };
     init();
   }, []);
+
   // camera kit device camera duudah function
   const setCameraKitSource = async (session, deviceId) => {
     if (video) {
@@ -101,7 +102,7 @@ const CameraKit = () => {
     }
     video = await navigator.mediaDevices.getUserMedia({
       video: {
-        // deviceId,
+        deviceId,
         width: 1080,
         height: 1920,
       },
@@ -113,6 +114,26 @@ const CameraKit = () => {
     source.setTransform(Transform2D.MirrorX);
     session.play();
   };
+  useEffect(() => {
+    const enumerateDevices = async () => {
+      if (!navigator.mediaDevices?.enumerateDevices) {
+        console.log("enumerateDevices() not supported.");
+      } else {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          devices.forEach((device) => {
+            console.log(
+              `${device.kind}: ${device.label} id = ${device.deviceId}`
+            );
+          });
+        } catch (err) {
+          console.error(`${err.name}: ${err.message}`);
+        }
+      }
+    };
+
+    enumerateDevices();
+  }, []);
   //camera songoh function
   const attachCamerasToSelect = async (session) => {
     DeviceCameraType.current.innerHTML = "";
