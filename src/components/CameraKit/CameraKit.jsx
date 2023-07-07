@@ -101,7 +101,9 @@ const CameraKit = () => {
     }
     video = await navigator.mediaDevices.getUserMedia({
       video: {
-        deviceId,
+        // deviceId,
+        width: 1280,
+        height: 720,
       },
     });
     // }
