@@ -184,7 +184,7 @@ const CameraKit = () => {
   return (
     <>
       <div
-        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container sm:mt-[100px]`}>
+        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit container sm:mt-[200px]`}>
         <div
           className={`${
             show1 ? "hidden" : "block"
