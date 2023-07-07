@@ -102,7 +102,7 @@ const CameraKit = () => {
     }
     video = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: { exact: "environment" },
+        facingMode: "user",
         // deviceId,
         // width: 1080,
         // height: 1920,
