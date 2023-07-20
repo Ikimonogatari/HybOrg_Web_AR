@@ -205,7 +205,7 @@ const CameraKit = () => {
   return (
     <>
       <div
-        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit sm:mt-[150px]`}>
+        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit flex justify-center sm:mt-[150px]`}>
         <div
           className={`${
             show1 ? "hidden" : "block"
