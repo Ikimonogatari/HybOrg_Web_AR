@@ -4,6 +4,13 @@ import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
 import { useUploadVideoMutation } from "../../api";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
 
 let video;
 const CameraKit = () => {
@@ -11,6 +18,15 @@ const CameraKit = () => {
   const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadVideoMutation();
   const [recording, setRecording] = useState(false);
+  const [swiper, setSwiper] = useState(null);
+  const [lenses, setLenses] = useState([]);
+  const [isSelectedLens, setIsSelectedLens] = useState(null);
+  const goNext = () => {
+    swiper.slideNext();
+  };
+  const goPrev = () => {
+    swiper.slidePrev();
+  };
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -38,19 +54,6 @@ const CameraKit = () => {
   const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
 
   const DeviceCameraType = useRef(null);
-  const SnapLenses = useRef(null);
-
-  // let saveData = (function () {
-  //   var a = document.createElement("a");
-  //   document.body.appendChild(a);
-  //   a.style = "display: none";
-  //   return function (url) {
-  //     a.href = url;
-  //     a.download = "snap-hyborg";
-  //     a.click();
-  //     // window.URL.revokeObjectURL(url);
-  //   };
-  // })();
 
   useEffect(() => {
     const init = async () => {
@@ -67,10 +70,6 @@ const CameraKit = () => {
         chunksRef.current = [];
         console.log(file);
         upload({ file });
-        // let url = URL.createObjectURL(blob);
-        // console.log(url);
-        // videoRef.current.src = url;
-        // saveData();
         setRecording(false);
         setRemainingTime(15);
       };
@@ -85,7 +84,8 @@ const CameraKit = () => {
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
       ]);
-      session.applyLens(lenses[8]);
+      session.applyLens(lenses[1]);
+      setIsSelectedLens(1);
 
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
@@ -146,26 +146,27 @@ const CameraKit = () => {
       option.text = camera.label;
       DeviceCameraType.current.appendChild(option);
     });
-    DeviceCameraType.current.addEventListener("change", (event) => {
+    DeviceCameraType.current.addEventListener("click", (event) => {
       const deviceId = event.target.selectedOptions[0].value;
       setCameraKitSource(session, deviceId);
     });
   };
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
-    SnapLenses.current.innerHTML = "";
-    lenses.forEach((lens) => {
-      const option = document.createElement("option");
-      option.value = lens.id;
-      option.text = lens.name;
-      SnapLenses.current.appendChild(option);
+    const selectLens = document.querySelectorAll(".selectLens");
+    selectLens.forEach((div) => {
+      div.addEventListener("click", () => {
+        const lensId = div.id;
+        const lens = lenses.find((lens) => lens.id === lensId);
+        if (lens) session.applyLens(lens);
+        const lensIndex = lenses.indexOf(lens);
+        setIsSelectedLens(lensIndex);
+        console.log(lens);
+      });
     });
-    SnapLenses.current.addEventListener("change", (event) => {
-      const lensId = event.target.selectedOptions[0].value;
-      const lens = lenses.find((lens) => lens.id === lensId);
-      if (lens) session.applyLens(lens);
-    });
+    setLenses(lenses);
   };
+
   const startRecording = () => {
     mediaRecorderRef.current.start();
     setRecording(true);
@@ -206,8 +207,13 @@ const CameraKit = () => {
   return (
     <>
       <div
-        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit flex justify-center`}
+        className={`relative h-screen w-full mx-auto bg-black sm:bg-inherit flex justify-center`}
       >
+        <img
+          src="/greyLogo.png"
+          className="absolute mx-auto top-14"
+          alt="logo"
+        />
         <div
           className={`${
             show1 ? "hidden" : "block"
@@ -215,36 +221,65 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]">
-              <div className="px-2 py-2 flex items-center gap-1 w-auto sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
-                <select
-                  ref={DeviceCameraType}
-                  className="appearance-none bg-transparent text-[10px] text-white"
-                ></select>
-              </div>
-              <button onClick={startRecording}>
-                <img
-                  src="button.png"
-                  className="w-[90px] h-[90px] bg-transparent rounded-full"
-                  alt="button"
-                />
-              </button>
-              <div className="px-2 py-2 flex items-center gap-1 w-auto sm:w-auto rounded-3xl bg-[#CD515266] text-white">
-                <select
-                  ref={SnapLenses}
-                  className="appearance-none bg-transparent text-[10px] text-white"
-                ></select>
-              </div>
+            <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
+              <Swiper
+                modules={[Navigation, Pagination, Scrollbar]}
+                spaceBetween={10}
+                direction="vertical"
+                slidesPerView={3}
+                onSwiper={(s) => {
+                  console.log("initialize swiper", s);
+                  setSwiper(s);
+                }}
+                className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
+              >
+                {lenses.map((lens, index) => (
+                  <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
+                    <div className="selectLens" id={lens.id} key={lens.id}>
+                      <img
+                        src={lens.iconUrl}
+                        alt={lens.name}
+                        className={
+                          isSelectedLens === index
+                            ? `w-20 h-20 rounded-full p-1 border-red-500 border-[1px] cursor-pointer bg-transparent ml-auto`
+                            : `w-12 h-12 mt-4 cursor-pointer bg-transparent ml-auto`
+                        }
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
+          ) : null}
+          {!recording ? (
+            <>
+              <div className="bg-transparent absolute bottom-14 left-7">
+                <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+                  <select
+                    ref={DeviceCameraType}
+                    className="appearance-none bg-transparent text-[10px] text-white"
+                  ></select>
+                </div>
+              </div>
+              <div className="mx-auto bg-transparent absolute bottom-5">
+                <button onClick={startRecording}>
+                  <img
+                    src="blackButton.png"
+                    className="w-[90px] h-[90px] bg-transparent rounded-full"
+                    alt="button"
+                  />
+                </button>
+              </div>
+            </>
           ) : (
-            <div className="flex items-center justify-center absolute bottom-50% right-6 sm:right-[200px] rounded-full p-2 bg-transparent backdrop-blur-sm">
+            <div className="flex items-center justify-center absolute bottom-5 rounded-full p-2 bg-transparent backdrop-blur-sm">
               <img
-                src="timerBG.png"
+                src="timerBg1.png"
                 className="absolute bg-transparent w-[90px] h-[90px]"
                 alt="timer"
               />
               <div
-                className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
+                className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
                 role="status"
               ></div>
               <span className="text-white absolute bg-transparent font-bold text-3xl">
