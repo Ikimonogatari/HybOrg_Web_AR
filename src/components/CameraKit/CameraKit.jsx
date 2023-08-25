@@ -192,7 +192,11 @@ const CameraKit = () => {
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-
+  useEffect(() => {
+    const track = document.querySelector(".selectLens");
+    // have access to it
+    console.log(track, "IS IT WORKING ???");
+  }, []);
   const handleClick = () => {
     if (show) {
       setShow(false);
@@ -242,7 +246,7 @@ const CameraKit = () => {
                 {lenses.map((lens, index) => (
                   <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
                     <div
-                      class="selectLens"
+                      className="selectLens"
                       id={lens.id}
                       key={lens.id}
                       onClick={() => console.log("WTF")}
