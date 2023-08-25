@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
+import { render } from "react-dom";
 
 let video;
 const CameraKit = () => {
@@ -236,7 +237,12 @@ const CameraKit = () => {
               >
                 {lenses.map((lens, index) => (
                   <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
-                    <div className="selectLens" id={lens.id} key={lens.id}>
+                    <div
+                      class="selectLens"
+                      id={lens.id}
+                      key={lens.id}
+                      onClick={() => console.log("WTF")}
+                    >
                       <img
                         src={lens.iconUrl}
                         alt={lens.name}
