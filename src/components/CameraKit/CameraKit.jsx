@@ -155,49 +155,43 @@ const CameraKit = () => {
   };
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
-    const selectLensElements = Array.from(
-      document.getElementsByClassName("selectLens")
-    );
-
-    Lenses.current = selectLensElements.map(() => React.createRef());
-    console.log(selectLensElements, "GREAT SUCCESS!!!");
-
-    // const selectLens = document.querySelectorAll(".selectLens");
-    // Lenses.current.innerHTML = "";
-    // console.log(selectLens);
-    console.log("COLLECTED LENS DIVS");
-    selectLensElements.forEach((div, index) => {
-      div.addEventListener("click", () => {
-        const lensId = div.id;
-        const lens = lenses.find((lens) => lens.id === lensId);
-        if (lens) session.applyLens(lens);
-        const lensIndex = lenses.indexOf(lens);
-        setIsSelectedLens(lensIndex);
-        console.log(
-          "THIS IS REAL LENS RESULT",
-          lens,
-          "THIS IS REAL LENS RESULT"
-        );
-        console.log("APPLIED!");
-      });
-      Lenses.current[index].current = div;
-    });
-    setLenses(lenses);
-    console.log(lenses);
-    console.log(session);
     document.addEventListener("DOMContentLoaded", () => {
-      const track = document.getElementsByClassName(".selectLens");
-      // Your code to work with selectLensElement
-      console.log(
-        "xxxxxxxxxxxxxxXXXXX",
-        track,
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      const selectLensElements = Array.from(
+        document.getElementsByClassName("selectLens")
       );
+
+      Lenses.current = selectLensElements.map(() => React.createRef());
+      console.log(selectLensElements, "GREAT SUCCESS!!!");
+
+      // const selectLens = document.querySelectorAll(".selectLens");
+      // Lenses.current.innerHTML = "";
+      // console.log(selectLens);
+      console.log("COLLECTED LENS DIVS");
+      selectLensElements.forEach((div, index) => {
+        div.addEventListener("click", () => {
+          const lensId = div.id;
+          const lens = lenses.find((lens) => lens.id === lensId);
+          if (lens) session.applyLens(lens);
+          const lensIndex = lenses.indexOf(lens);
+          setIsSelectedLens(lensIndex);
+          console.log(
+            "THIS IS REAL LENS RESULT",
+            lens,
+            "THIS IS REAL LENS RESULT"
+          );
+          console.log("APPLIED!");
+        });
+        Lenses.current[index].current = div;
+      });
+      setLenses(lenses);
+      console.log(lenses);
+      console.log(session);
+
+      const track = document.querySelector(".selectLens");
+      const track2 = document.getElementsByClassName(".selectLens");
+      // have access to it
+      console.log(track, "IS GET ELEMENTS BY ID ???", track2.length);
     });
-    const track = document.querySelector(".selectLens");
-    const track2 = document.getElementsByClassName(".selectLens");
-    // have access to it
-    console.log(track, "IS GET ELEMENTS BY ID ???", track2.length);
   };
 
   const startRecording = () => {
@@ -239,11 +233,7 @@ const CameraKit = () => {
       setShow1(true);
     }
   };
-  document.addEventListener("DOMContentLoaded", () => {
-    const track = document.getElementsByClassName("selectLens");
-    // Your code to work with selectLensElement
-    console.log("xxxxxxxxxxxxxxXXXXX", track, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-  });
+
   return (
     <>
       <div
