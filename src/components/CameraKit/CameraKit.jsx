@@ -188,7 +188,11 @@ const CameraKit = () => {
     document.addEventListener("DOMContentLoaded", () => {
       const track = document.getElementsByClassName(".selectLens");
       // Your code to work with selectLensElement
-      console.log(track, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+      console.log(
+        "xxxxxxxxxxxxxxXXXXX",
+        track,
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      );
     });
     const track = document.querySelector(".selectLens");
     const track2 = document.getElementsByClassName(".selectLens");
@@ -235,7 +239,11 @@ const CameraKit = () => {
       setShow1(true);
     }
   };
-
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.getElementsByClassName(".selectLens");
+    // Your code to work with selectLensElement
+    console.log("xxxxxxxxxxxxxxXXXXX", track, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  });
   return (
     <>
       <div
