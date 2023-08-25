@@ -112,6 +112,9 @@ const CameraKit = () => {
     await session.setSource(source);
 
     source.setTransform(Transform2D.MirrorX);
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    source.setRenderSize(screenWidth, screenHeight);
     session.play();
   };
   useEffect(() => {
@@ -205,41 +208,46 @@ const CameraKit = () => {
   return (
     <>
       <div
-        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit flex justify-center sm:mt-[150px]`}>
+        className={`relative h-screen sm:h-full w-full mx-auto bg-black sm:bg-inherit flex justify-center`}
+      >
         <div
           className={`${
             show1 ? "hidden" : "block"
-          } flex flex-col justify-center items-center`}>
+          } flex flex-col justify-center items-center`}
+        >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className='bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]'>
-              <div className='px-2 py-2 flex items-center gap-1 w-auto sm:w-auto  rounded-3xl bg-[#CD515266] text-white'>
+            <div className="bg-transparent flex flex-col items-end gap-3 absolute bottom-50% right-6 xl:right-[200px]">
+              <div className="px-2 py-2 flex items-center gap-1 w-auto sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                 <select
                   ref={DeviceCameraType}
-                  className='appearance-none bg-transparent text-[10px] text-white'></select>
+                  className="appearance-none bg-transparent text-[10px] text-white"
+                ></select>
               </div>
               <button onClick={startRecording}>
                 <img
-                  src='button.png'
-                  className='w-[90px] h-[90px] bg-transparent rounded-full'
+                  src="button.png"
+                  className="w-[90px] h-[90px] bg-transparent rounded-full"
                 />
               </button>
-              <div className='px-2 py-2 flex items-center gap-1 w-auto sm:w-auto rounded-3xl bg-[#CD515266] text-white'>
+              <div className="px-2 py-2 flex items-center gap-1 w-auto sm:w-auto rounded-3xl bg-[#CD515266] text-white">
                 <select
                   ref={SnapLenses}
-                  className='appearance-none bg-transparent text-[10px] text-white'></select>
+                  className="appearance-none bg-transparent text-[10px] text-white"
+                ></select>
               </div>
             </div>
           ) : (
-            <div className='flex items-center justify-center absolute bottom-50% right-6 sm:right-[200px] rounded-full p-2 bg-transparent backdrop-blur-sm'>
+            <div className="flex items-center justify-center absolute bottom-50% right-6 sm:right-[200px] rounded-full p-2 bg-transparent backdrop-blur-sm">
               <img
-                src='timerBG.png'
-                className='absolute bg-transparent w-[90px] h-[90px]'
+                src="timerBG.png"
+                className="absolute bg-transparent w-[90px] h-[90px]"
               />
               <div
-                className='bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]'
-                role='status'></div>
-              <span className='text-white absolute bg-transparent font-bold text-3xl'>
+                className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
+                role="status"
+              ></div>
+              <span className="text-white absolute bg-transparent font-bold text-3xl">
                 {remainingTime}
               </span>
             </div>
@@ -250,40 +258,43 @@ const CameraKit = () => {
             <div
               className={`${
                 show ? "block" : "hidden"
-              } absolute z-50 w-screen h-screen flex gap-6 justify-center items-center bg-[#000000CC] backdrop-blur-sm`}>
-              <button onClick={handleClick} className=''>
+              } absolute z-50 w-screen h-screen flex gap-6 justify-center items-center bg-[#000000CC] backdrop-blur-sm`}
+            >
+              <button onClick={handleClick} className="">
                 <img
-                  src='button2.png'
-                  className='w-16 h-16 rounded-2xl bg-transparent'
+                  src="button2.png"
+                  className="w-16 h-16 rounded-2xl bg-transparent"
                 />
               </button>
-              <button onClick={handleClick1} className=''>
+              <button onClick={handleClick1} className="">
                 <img
-                  src='button1.png'
-                  className='w-16 h-16 rounded-2xl bg-transparent'
+                  src="button1.png"
+                  className="w-16 h-16 rounded-2xl bg-transparent"
                 />
               </button>
             </div>
             <div
               className={`${
                 show1 ? "block" : "hidden"
-              } px-7 flex flex-col gap-10 justify-center items-center`}>
-              <div className='absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center'>
-                <img src='Frame.png' className='w-[92px] h-[26px]' />
+              } px-7 flex flex-col gap-10 justify-center items-center`}
+            >
+              <div className="absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center">
+                <img src="Frame.png" className="w-[92px] h-[26px]" />
                 <button
-                  onClick={() => (setShow1(false), window.location.reload())}>
-                  <img src='Fab.png' className='w-10 h-10' />
+                  onClick={() => (setShow1(false), window.location.reload())}
+                >
+                  <img src="Fab.png" className="w-10 h-10" />
                 </button>
               </div>
-              <span className='text-white font-bold text-center text-2xl '>
+              <span className="text-white font-bold text-center text-2xl ">
                 QR кодыг уншуулаад өөрийн бичлэгээ аваарай.
               </span>
               <img
                 ref={imageRef}
-                alt='QR Code'
-                className='w-[173px] h-[173px]'
+                alt="QR Code"
+                className="w-[173px] h-[173px]"
               />
-              <span className='text-white font-bold text-center text-2xl'>
+              <span className="text-white font-bold text-center text-2xl">
                 @hyb_org @mbankmongolia Mention хийгээрэй
               </span>
             </div>
