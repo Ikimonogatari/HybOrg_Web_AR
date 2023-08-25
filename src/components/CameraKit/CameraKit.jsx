@@ -160,6 +160,7 @@ const CameraKit = () => {
     );
 
     Lenses.current = selectLensElements.map(() => React.createRef());
+    console.log(selectLensElements, "GREAT SUCCESS!!!");
 
     // const selectLens = document.querySelectorAll(".selectLens");
     // Lenses.current.innerHTML = "";
