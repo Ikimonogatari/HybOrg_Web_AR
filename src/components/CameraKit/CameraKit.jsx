@@ -242,7 +242,7 @@ const CameraKit = () => {
                         className={
                           isSelectedLens === index
                             ? `w-20 h-20 rounded-full p-1 border-red-500 border-[1px] cursor-pointer bg-transparent ml-auto`
-                            : `w-12 h-12 mt-4 cursor-pointer bg-transparent ml-auto`
+                            : `w-12 h-12 mt-4 bg-transparent ml-auto`
                         }
                       />
                     </div>
