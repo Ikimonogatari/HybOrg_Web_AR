@@ -162,6 +162,7 @@ const CameraKit = () => {
         const lensIndex = lenses.indexOf(lens);
         setIsSelectedLens(lensIndex);
         console.log(lens);
+        console.log("APPLIED!");
       });
     });
     setLenses(lenses);
@@ -241,8 +242,8 @@ const CameraKit = () => {
                         alt={lens.name}
                         className={
                           isSelectedLens === index
-                            ? `w-20 h-20 rounded-full p-1 border-red-500 border-[1px] cursor-pointer bg-transparent ml-auto`
-                            : `w-12 h-12 mt-4 bg-transparent ml-auto`
+                            ? `w-20 h-20 rounded-full cursor-pointer p-1 border-red-500 border-[1px] bg-transparent ml-auto`
+                            : `w-12 h-12 rounded-full cursor-pointer mt-4 bg-transparent ml-auto`
                         }
                       />
                     </div>
