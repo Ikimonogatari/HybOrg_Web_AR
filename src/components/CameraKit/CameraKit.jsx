@@ -103,8 +103,6 @@ const CameraKit = () => {
     video = await navigator.mediaDevices.getUserMedia({
       video: {
         deviceId,
-        // width: 1080,
-        // height: 1920,
       },
     });
     // }
@@ -228,6 +226,7 @@ const CameraKit = () => {
                 <img
                   src="button.png"
                   className="w-[90px] h-[90px] bg-transparent rounded-full"
+                  alt="button"
                 />
               </button>
               <div className="px-2 py-2 flex items-center gap-1 w-auto sm:w-auto rounded-3xl bg-[#CD515266] text-white">
@@ -242,6 +241,7 @@ const CameraKit = () => {
               <img
                 src="timerBG.png"
                 className="absolute bg-transparent w-[90px] h-[90px]"
+                alt="timer"
               />
               <div
                 className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-white border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
@@ -264,12 +264,14 @@ const CameraKit = () => {
                 <img
                   src="button2.png"
                   className="w-16 h-16 rounded-2xl bg-transparent"
+                  alt="button2"
                 />
               </button>
               <button onClick={handleClick1} className="">
                 <img
                   src="button1.png"
                   className="w-16 h-16 rounded-2xl bg-transparent"
+                  alt="button1"
                 />
               </button>
             </div>
@@ -279,11 +281,15 @@ const CameraKit = () => {
               } px-7 flex flex-col gap-10 justify-center items-center`}
             >
               <div className="absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center">
-                <img src="Frame.png" className="w-[92px] h-[26px]" />
+                <img
+                  src="Frame.png"
+                  className="w-[92px] h-[26px]"
+                  alt="frame"
+                />
                 <button
                   onClick={() => (setShow1(false), window.location.reload())}
                 >
-                  <img src="Fab.png" className="w-10 h-10" />
+                  <img src="Fab.png" className="w-10 h-10" alt="fab" />
                 </button>
               </div>
               <span className="text-white font-bold text-center text-2xl ">
