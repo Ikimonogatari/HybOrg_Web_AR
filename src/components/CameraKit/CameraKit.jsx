@@ -253,7 +253,7 @@ const CameraKit = () => {
           ) : null}
           {!recording ? (
             <>
-              <div className="bg-transparent absolute bottom-14 left-7">
+              <div className="bg-transparent absolute bottom-20 left-7">
                 <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                   <select
                     ref={DeviceCameraType}
@@ -261,7 +261,7 @@ const CameraKit = () => {
                   ></select>
                 </div>
               </div>
-              <div className="mx-auto bg-transparent absolute bottom-5">
+              <div className="mx-auto bg-transparent absolute bottom-10">
                 <button onClick={startRecording}>
                   <img
                     src="blackButton.png"
