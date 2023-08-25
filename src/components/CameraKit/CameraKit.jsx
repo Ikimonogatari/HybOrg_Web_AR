@@ -86,7 +86,6 @@ const CameraKit = () => {
         lensGroupId,
       ]);
       // session.applyLens(lenses[1]);
-      setIsSelectedLens(1);
 
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
