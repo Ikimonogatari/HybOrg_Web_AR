@@ -295,7 +295,7 @@ const CameraKit = () => {
                 className="w-[173px] h-[173px]"
               />
               <span className="text-white font-bold text-center text-2xl">
-                @hyb_org @mbankmongolia Mention хийгээрэй
+                @hyb_org Mention хийгээрэй
               </span>
             </div>
           </>
