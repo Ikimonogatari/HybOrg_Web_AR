@@ -164,7 +164,11 @@ const CameraKit = () => {
         if (lens) session.applyLens(lens);
         const lensIndex = lenses.indexOf(lens);
         setIsSelectedLens(lensIndex);
-        console.log(lens);
+        console.log(
+          "THIS IS REAL LENS RESULT",
+          lens,
+          "THIS IS REAL LENS RESULT"
+        );
         console.log("APPLIED!");
       });
     });
@@ -174,7 +178,7 @@ const CameraKit = () => {
     const track = document.querySelector(".selectLens");
     const track2 = document.getElementsByClassName(".selectLens");
     // have access to it
-    console.log(track, "IS IT WORKING ???", track2.length);
+    console.log(track, "IS QUERY SELECTOR WORKING ???", track2.length);
   };
 
   const startRecording = () => {
