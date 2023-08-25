@@ -32,6 +32,7 @@ const CameraKit = () => {
     if (uploadResponse.isError) {
       console.log("ERROR!!!");
       console.log(uploadResponse.error);
+      window.location.reload();
     }
     if (uploadResponse.isSuccess) {
       console.log("SUCCESS!!!");
