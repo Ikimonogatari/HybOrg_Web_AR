@@ -240,7 +240,7 @@ const CameraKit = () => {
     }
   };
   document.addEventListener("DOMContentLoaded", () => {
-    const track = document.getElementsByClassName(".selectLens");
+    const track = document.getElementsByClassName("selectLens");
     // Your code to work with selectLensElement
     console.log("xxxxxxxxxxxxxxXXXXX", track, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   });
