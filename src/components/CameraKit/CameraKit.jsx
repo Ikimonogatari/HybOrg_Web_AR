@@ -169,6 +169,8 @@ const CameraKit = () => {
       });
     });
     setLenses(lenses);
+    console.log(lenses);
+    console.log(session);
   };
 
   const startRecording = () => {
