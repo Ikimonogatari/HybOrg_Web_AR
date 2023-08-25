@@ -56,6 +56,7 @@ const CameraKit = () => {
   const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
 
   const DeviceCameraType = useRef(null);
+  const Lenses = useRef([]);
 
   useEffect(() => {
     const init = async () => {
@@ -154,10 +155,17 @@ const CameraKit = () => {
   };
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
-    const selectLens = document.querySelectorAll(".selectLens");
-    console.log(selectLens);
+    const selectLensElements = Array.from(
+      document.getElementsByClassName("selectLens")
+    );
+
+    Lenses.current = selectLensElements.map(() => React.createRef());
+
+    // const selectLens = document.querySelectorAll(".selectLens");
+    // Lenses.current.innerHTML = "";
+    // console.log(selectLens);
     console.log("COLLECTED LENS DIVS");
-    selectLens.forEach((div) => {
+    selectLensElements.forEach((div, index) => {
       div.addEventListener("click", () => {
         const lensId = div.id;
         const lens = lenses.find((lens) => lens.id === lensId);
@@ -171,6 +179,7 @@ const CameraKit = () => {
         );
         console.log("APPLIED!");
       });
+      Lenses.current[index].current = div;
     });
     setLenses(lenses);
     console.log(lenses);
