@@ -171,6 +171,10 @@ const CameraKit = () => {
     setLenses(lenses);
     console.log(lenses);
     console.log(session);
+    const track = document.querySelector(".selectLens");
+    const track2 = document.getElementsByClassName(".selectLens");
+    // have access to it
+    console.log(track, "IS IT WORKING ???", track2.length);
   };
 
   const startRecording = () => {
@@ -192,11 +196,10 @@ const CameraKit = () => {
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-  useEffect(() => {
-    const track = document.querySelector(".selectLens");
-    // have access to it
-    console.log(track, "IS IT WORKING ???");
-  }, []);
+  const track = document.querySelector(".selectLens");
+  const track2 = document.getElementsByClassName(".selectLens");
+  // have access to it
+  console.log(track, "IS IT WORKING ???", track2.length);
   const handleClick = () => {
     if (show) {
       setShow(false);
