@@ -187,7 +187,7 @@ const CameraKit = () => {
     const track = document.querySelector(".selectLens");
     const track2 = document.getElementsByClassName(".selectLens");
     // have access to it
-    console.log(track, "IS QUERY SELECTOR WORKING ???", track2.length);
+    console.log(track, "IS GET ELEMENTS BY ID ???", track2.length);
   };
 
   const startRecording = () => {
