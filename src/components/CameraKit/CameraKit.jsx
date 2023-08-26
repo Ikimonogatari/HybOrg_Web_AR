@@ -11,7 +11,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
-import { render } from "react-dom";
 
 let video;
 const CameraKit = () => {
@@ -22,12 +21,6 @@ const CameraKit = () => {
   const [swiper, setSwiper] = useState(null);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
-  const goNext = () => {
-    swiper.slideNext();
-  };
-  const goPrev = () => {
-    swiper.slidePrev();
-  };
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -167,37 +160,8 @@ const CameraKit = () => {
         console.log("APPLIED!");
       });
     });
-    console.log("Proof that lenses loaded", lenses);
+    console.log("Proof that lenses loaded");
   };
-  // const LensSelect = async (lenses, session) => {
-  //   const selectLens = document.querySelectorAll(".selectLens");
-  //   selectLens.forEach((div) => {
-  //     div.addEventListener("click", () => {
-  //       const lensId = div.id;
-  //       const lens = lenses.find((lens) => lens.id === lensId);
-  //       if (lens) session.applyLens(lens);
-  //       const lensIndex = lenses.indexOf(lens);
-  //       setIsSelectedLens(lensIndex);
-  //       console.log(lens);
-  //       console.log("APPLIED!");
-  //     });
-  //   });
-  //   setLenses(lenses);
-  //   console.log("Proof that lenses loaded", lenses);
-  // };
-  // useEffect(() => {
-  //   const init = async () => {
-  //     const cameraKit = await bootstrapCameraKit({ apiToken: CameraKitApi });
-  //     const session = await cameraKit.createSession();
-  //     const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
-  //       lensGroupId,
-  //     ]);
-
-  //     await LensSelect(lenses, session);
-  //   };
-  //   init();
-  // }, []);
-
   const startRecording = () => {
     mediaRecorderRef.current.start();
     setRecording(true);
@@ -217,7 +181,6 @@ const CameraKit = () => {
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-  console.log(lenses);
   const handleClick = () => {
     if (show) {
       setShow(false);
