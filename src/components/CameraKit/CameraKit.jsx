@@ -221,7 +221,7 @@ const CameraKit = () => {
       >
         <img
           src="/greyLogo.png"
-          className="test absolute mx-auto top-14"
+          className="selectLens absolute mx-auto top-14"
           alt="logo"
         />
         <div
@@ -231,7 +231,7 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="test bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
+            <div className="selectLens bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
               <Swiper
                 id="big-div"
                 modules={[Navigation, Pagination, Scrollbar]}
