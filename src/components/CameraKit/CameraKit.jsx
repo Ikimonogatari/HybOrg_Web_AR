@@ -4,13 +4,6 @@ import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
 import { useUploadVideoMutation } from "../../api";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/autoplay";
 
 let video;
 const CameraKit = () => {
@@ -18,9 +11,6 @@ const CameraKit = () => {
   const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadVideoMutation();
   const [recording, setRecording] = useState(false);
-  const [swiper, setSwiper] = useState(null);
-  const [lenses, setLenses] = useState([]);
-  const [isSelectedLens, setIsSelectedLens] = useState(null);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -45,7 +35,6 @@ const CameraKit = () => {
   const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
 
   const DeviceCameraType = useRef(null);
-  const Lenses = useRef([]);
 
   useEffect(() => {
     const init = async () => {
