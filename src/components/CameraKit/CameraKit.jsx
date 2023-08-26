@@ -91,6 +91,7 @@ const CameraKit = () => {
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
       await attachLensesToSelect(lenses, session);
+      setLenses(lenses);
     };
     init();
   }, []);
@@ -166,8 +167,36 @@ const CameraKit = () => {
         console.log("APPLIED!");
       });
     });
-    setLenses(lenses);
+    console.log("Proof that lenses loaded", lenses);
   };
+  // const LensSelect = async (lenses, session) => {
+  //   const selectLens = document.querySelectorAll(".selectLens");
+  //   selectLens.forEach((div) => {
+  //     div.addEventListener("click", () => {
+  //       const lensId = div.id;
+  //       const lens = lenses.find((lens) => lens.id === lensId);
+  //       if (lens) session.applyLens(lens);
+  //       const lensIndex = lenses.indexOf(lens);
+  //       setIsSelectedLens(lensIndex);
+  //       console.log(lens);
+  //       console.log("APPLIED!");
+  //     });
+  //   });
+  //   setLenses(lenses);
+  //   console.log("Proof that lenses loaded", lenses);
+  // };
+  // useEffect(() => {
+  //   const init = async () => {
+  //     const cameraKit = await bootstrapCameraKit({ apiToken: CameraKitApi });
+  //     const session = await cameraKit.createSession();
+  //     const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
+  //       lensGroupId,
+  //     ]);
+
+  //     await LensSelect(lenses, session);
+  //   };
+  //   init();
+  // }, []);
 
   const startRecording = () => {
     mediaRecorderRef.current.start();
@@ -188,7 +217,7 @@ const CameraKit = () => {
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-
+  console.log(lenses);
   const handleClick = () => {
     if (show) {
       setShow(false);
@@ -238,7 +267,7 @@ const CameraKit = () => {
                 {lenses.map((lens, index) => (
                   <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
                     <div
-                      class="selectLens"
+                      className="selectLens"
                       id={lens.id}
                       key={lens.id}
                       onClick={() => console.log("Clicked")}
