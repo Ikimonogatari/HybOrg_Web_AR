@@ -152,6 +152,8 @@ const CameraKit = () => {
 
     if (element) {
       console.log("at least the items loaded", element);
+      const test = document.querySelectorAll(".test");
+      console.log("is test here ?", test);
       const selectLens = document.querySelectorAll(".selectLens");
       console.log(selectLens);
       selectLens.forEach((div) => {
@@ -219,7 +221,7 @@ const CameraKit = () => {
       >
         <img
           src="/greyLogo.png"
-          className="absolute mx-auto top-14"
+          className="test absolute mx-auto top-14"
           alt="logo"
         />
         <div
@@ -229,7 +231,7 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
+            <div className="test bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
               <Swiper
                 id="big-div"
                 modules={[Navigation, Pagination, Scrollbar]}
