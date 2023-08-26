@@ -217,19 +217,19 @@ const CameraKit = () => {
           {!recording ? (
             <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
               {lenses.map((lens, index) => (
-                <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
-                  <img
-                    id={lens.id}
-                    src={lens.iconUrl}
-                    alt={lens.name}
-                    className={`selectLens
+                // <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
+                <img
+                  id={lens.id}
+                  src={lens.iconUrl}
+                  alt={lens.name}
+                  className={`selectLens
                         ${
                           isSelectedLens === index
                             ? `w-20 h-20 rounded-full cursor-pointer p-1 border-red-500 border-[1px] bg-transparent ml-auto`
                             : `w-12 h-12 rounded-full cursor-pointer mt-4 bg-transparent ml-auto`
                         }`}
-                  />
-                </SwiperSlide>
+                />
+                // </SwiperSlide>
               ))}
               <Swiper
                 modules={[Navigation, Pagination, Scrollbar]}
