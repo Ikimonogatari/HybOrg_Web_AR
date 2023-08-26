@@ -79,7 +79,6 @@ const CameraKit = () => {
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
       ]);
-      // session.applyLens(lenses[1]);
 
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
@@ -100,7 +99,6 @@ const CameraKit = () => {
         deviceId,
       },
     });
-    // }
     const source = createMediaStreamSource(video);
     await session.setSource(source);
 
@@ -147,27 +145,20 @@ const CameraKit = () => {
     });
   };
   // snapchat lens songoh function
-  const myElementRef = useRef(null);
   const attachLensesToSelect = async (lenses, session) => {
-    if (myElementRef.current) {
-      const innerHtml = myElementRef.current.innerHTML;
-      const id = myElementRef.current.id;
-      console.log("element is valid", id);
-      console.log("inner html", innerHtml);
-      const selectLens = document.querySelectorAll(".selectLens");
-      console.log(selectLens);
-      selectLens.forEach((div) => {
-        div.addEventListener("click", () => {
-          const lensId = div.id;
-          const lens = lenses.find((lens) => lens.id === lensId);
-          if (lens) session.applyLens(lens);
-          const lensIndex = lenses.indexOf(lens);
-          setIsSelectedLens(lensIndex);
-          console.log(lens);
-          console.log("APPLIED!");
-        });
+    const selectLens = document.querySelectorAll(".selectLens");
+    console.log(selectLens);
+    selectLens.forEach((div) => {
+      div.addEventListener("click", () => {
+        const lensId = div.id;
+        const lens = lenses.find((lens) => lens.id === lensId);
+        if (lens) session.applyLens(lens);
+        const lensIndex = lenses.indexOf(lens);
+        setIsSelectedLens(lensIndex);
+        console.log(lens);
+        console.log("APPLIED!");
       });
-    }
+    });
   };
 
   const startRecording = () => {
@@ -233,7 +224,6 @@ const CameraKit = () => {
                 onSwiper={(s) => {
                   setSwiper(s);
                 }}
-                ref={myElementRef}
                 className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
               >
                 {lenses.map((lens, index) => (
