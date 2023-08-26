@@ -137,25 +137,20 @@ const CameraKit = () => {
     });
   };
   // snapchat lens songoh function
-
+  const SnapLenses = useRef(null);
   const attachLensesToSelect = async (lenses, session) => {
-    const selectLensElements = Array.from(
-      document.getElementsByClassName("selectLens")
-    );
-
-    Lenses.current = selectLensElements.map(() => React.createRef());
-    selectLensElements.forEach((div, index) => {
-      div.addEventListener("click", () => {
-        const lensId = div.id;
-        const lens = lenses.find((lens) => lens.id === lensId);
-        if (lens) session.applyLens(lens);
-        const lensIndex = lenses.indexOf(lens);
-        setIsSelectedLens(lensIndex);
-        console.log(lens);
-      });
-      Lenses.current[index].current = div;
+    SnapLenses.current.innerHTML = "";
+    lenses.forEach((lens) => {
+      const option = document.createElement("option");
+      option.value = lens.id;
+      option.text = lens.name;
+      SnapLenses.current.appendChild(option);
     });
-    setLenses(lenses);
+    SnapLenses.current.addEventListener("change", (event) => {
+      const lensId = event.target.selectedOptions[0].value;
+      const lens = lenses.find((lens) => lens.id === lensId);
+      if (lens) session.applyLens(lens);
+    });
   };
 
   const startRecording = () => {
@@ -211,38 +206,13 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
-              <Swiper
-                modules={[Navigation, Pagination, Scrollbar]}
-                spaceBetween={10}
-                direction="vertical"
-                slidesPerView={3}
-                onSwiper={(s) => {
-                  setSwiper(s);
-                }}
-                className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
-              >
-                {lenses.map((lens, index) => (
-                  <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
-                    <div
-                      className="selectLens"
-                      id={lens.id}
-                      key={lens.id}
-                      onClick={() => console.log("Applying")}
-                    >
-                      <img
-                        src={lens.iconUrl}
-                        alt={lens.name}
-                        className={
-                          isSelectedLens === index
-                            ? `w-20 h-20 rounded-full cursor-pointer p-1 border-red-500 border-[1px] bg-transparent ml-auto`
-                            : `w-12 h-12 rounded-full cursor-pointer mt-4 bg-transparent ml-auto`
-                        }
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+            <div className="bg-transparent absolute bottom-20 right-7">
+              <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+                <select
+                  ref={SnapLenses}
+                  className="appearance-none bg-transparent text-[10px] text-white"
+                ></select>
+              </div>
             </div>
           ) : null}
           {!recording ? (
