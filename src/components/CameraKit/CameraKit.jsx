@@ -149,9 +149,11 @@ const CameraKit = () => {
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
     const element = document.getElementById("big-div");
-    console.log("at least the items loaded", element);
+
     if (element) {
+      console.log("at least the items loaded", element);
       const selectLens = document.querySelectorAll(".selectLens");
+      console.log(selectLens);
       selectLens.forEach((div) => {
         div.addEventListener("click", () => {
           const lensId = div.id;
