@@ -160,7 +160,6 @@ const CameraKit = () => {
         console.log("APPLIED!");
       });
     });
-    console.log("Proof that lenses loaded");
   };
   const startRecording = () => {
     mediaRecorderRef.current.start();
@@ -222,7 +221,6 @@ const CameraKit = () => {
                 direction="vertical"
                 slidesPerView={3}
                 onSwiper={(s) => {
-                  console.log("initialize swiper", s);
                   setSwiper(s);
                 }}
                 className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
