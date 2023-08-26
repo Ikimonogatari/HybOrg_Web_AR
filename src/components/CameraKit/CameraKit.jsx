@@ -140,7 +140,6 @@ const CameraKit = () => {
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
     const selectLens = document.querySelectorAll(".selectLens");
-    console.log(selectLens);
     selectLens.forEach((div) => {
       div.addEventListener("click", () => {
         const lensId = div.id;
@@ -148,8 +147,6 @@ const CameraKit = () => {
         if (lens) session.applyLens(lens);
         const lensIndex = lenses.indexOf(lens);
         setIsSelectedLens(lensIndex);
-        console.log(lens);
-        console.log("APPLIED!");
       });
     });
   };
