@@ -154,6 +154,7 @@ const CameraKit = () => {
     });
   };
   // snapchat lens songoh function
+
   const attachLensesToSelect = async (lenses, session) => {
     // document.addEventListener("DOMContentLoaded", () => {
     const selectLensElements = Array.from(
@@ -193,6 +194,12 @@ const CameraKit = () => {
     console.log(track, "IS GET ELEMENTS BY ID ???", track2.length);
     // });
   };
+  document.addEventListener("DOMContentLoaded", () => {
+    const selectLensElements = Array.from(
+      document.getElementsByClassName("selectLens")
+    );
+    console.log("XXXTEN", selectLensElements);
+  });
 
   const startRecording = () => {
     mediaRecorderRef.current.start();
