@@ -4,21 +4,15 @@ import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
 import { useUploadVideoMutation } from "../../api";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/autoplay";
+import RenderLenses from "../Lenses";
 
 let video;
+
 const CameraKit = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadVideoMutation();
   const [recording, setRecording] = useState(false);
-  const [swiper, setSwiper] = useState(null);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
 
@@ -147,7 +141,7 @@ const CameraKit = () => {
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
     const selectLens = document.querySelectorAll(".selectLens");
-    console.log("test log lens", selectLens);
+    console.log(selectLens);
     selectLens.forEach((div) => {
       div.addEventListener("click", () => {
         const lensId = div.id;
@@ -215,33 +209,7 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
-              {lenses.map((lens, index) => (
-                // <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
-                <img
-                  id={lens.id}
-                  src={lens.iconUrl}
-                  alt={lens.name}
-                  className={`selectLens
-                        ${
-                          isSelectedLens === index
-                            ? `w-20 h-20 rounded-full cursor-pointer p-1 border-red-500 border-[1px] bg-transparent ml-auto`
-                            : `w-12 h-12 rounded-full cursor-pointer mt-4 bg-transparent ml-auto`
-                        }`}
-                />
-                // </SwiperSlide>
-              ))}
-              <Swiper
-                modules={[Navigation, Pagination, Scrollbar]}
-                spaceBetween={10}
-                direction="vertical"
-                slidesPerView={3}
-                onSwiper={(s) => {
-                  setSwiper(s);
-                }}
-                className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
-              ></Swiper>
-            </div>
+            <RenderLenses lenses={lenses} isSelectedLens={isSelectedLens} />
           ) : null}
           {!recording ? (
             <>
