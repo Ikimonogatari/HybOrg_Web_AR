@@ -148,18 +148,22 @@ const CameraKit = () => {
   };
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
-    const selectLens = document.querySelectorAll(".selectLens");
-    selectLens.forEach((div) => {
-      div.addEventListener("click", () => {
-        const lensId = div.id;
-        const lens = lenses.find((lens) => lens.id === lensId);
-        if (lens) session.applyLens(lens);
-        const lensIndex = lenses.indexOf(lens);
-        setIsSelectedLens(lensIndex);
-        console.log(lens);
-        console.log("APPLIED!");
+    const element = document.getElementById("big-div");
+    console.log("at least the items loaded", element);
+    if (element) {
+      const selectLens = document.querySelectorAll(".selectLens");
+      selectLens.forEach((div) => {
+        div.addEventListener("click", () => {
+          const lensId = div.id;
+          const lens = lenses.find((lens) => lens.id === lensId);
+          if (lens) session.applyLens(lens);
+          const lensIndex = lenses.indexOf(lens);
+          setIsSelectedLens(lensIndex);
+          console.log(lens);
+          console.log("APPLIED!");
+        });
       });
-    });
+    }
   };
   useEffect(() => {
     const element = document.getElementById("big-div");
