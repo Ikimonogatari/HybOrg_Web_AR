@@ -73,11 +73,10 @@ const CameraKit = () => {
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
       ]);
-
+      setLenses(lenses);
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
       await attachLensesToSelect(lenses, session);
-      setLenses(lenses);
     };
     init();
   }, []);
