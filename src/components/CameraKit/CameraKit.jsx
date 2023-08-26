@@ -11,7 +11,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
-import { render } from "react-dom";
 
 let video;
 const CameraKit = () => {
@@ -22,22 +21,12 @@ const CameraKit = () => {
   const [swiper, setSwiper] = useState(null);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
-  const goNext = () => {
-    swiper.slideNext();
-  };
-  const goPrev = () => {
-    swiper.slidePrev();
-  };
 
   useEffect(() => {
     if (uploadResponse.isError) {
-      console.log("ERROR!!!");
-      console.log(uploadResponse.error);
       window.location.reload();
     }
     if (uploadResponse.isSuccess) {
-      console.log("SUCCESS!!!");
-      console.log(uploadResponse.data);
       const img = new Image();
       img.src = uploadResponse.data.qrImage;
       img.onload = () => {
@@ -67,11 +56,9 @@ const CameraKit = () => {
       let videoStream = session.output.live.captureStream(30);
       mediaRecorderRef.current = new MediaRecorder(videoStream);
       mediaRecorderRef.current.onstop = function (e) {
-        console.log(chunksRef.current);
         let blob = new Blob(chunksRef.current, { type: "video/mp4" });
         const file = new File([blob], "video.mp4", { type: "video/mp4" });
         chunksRef.current = [];
-        console.log(file);
         upload({ file });
         setRecording(false);
         setRemainingTime(15);
@@ -79,15 +66,12 @@ const CameraKit = () => {
 
       mediaRecorderRef.current.ondataavailable = function (e) {
         chunksRef.current.push(e.data);
-        console.log("Pushing data");
-        console.log(e.data);
       };
 
       if (canvas) canvas.replaceWith(session.output.live);
       const { lenses } = await cameraKit.lenses.repository.loadLensGroups([
         lensGroupId,
       ]);
-      // session.applyLens(lenses[1]);
 
       await setCameraKitSource(session);
       await attachCamerasToSelect(session);
@@ -107,7 +91,6 @@ const CameraKit = () => {
         deviceId,
       },
     });
-    // }
     const source = createMediaStreamSource(video);
     await session.setSource(source);
 
@@ -156,18 +139,11 @@ const CameraKit = () => {
   // snapchat lens songoh function
 
   const attachLensesToSelect = async (lenses, session) => {
-    // document.addEventListener("DOMContentLoaded", () => {
     const selectLensElements = Array.from(
       document.getElementsByClassName("selectLens")
     );
 
     Lenses.current = selectLensElements.map(() => React.createRef());
-    console.log(selectLensElements, "GREAT SUCCESS!!!");
-
-    // const selectLens = document.querySelectorAll(".selectLens");
-    // Lenses.current.innerHTML = "";
-    // console.log(selectLens);
-    console.log("COLLECTED LENS DIVS");
     selectLensElements.forEach((div, index) => {
       div.addEventListener("click", () => {
         const lensId = div.id;
@@ -175,36 +151,16 @@ const CameraKit = () => {
         if (lens) session.applyLens(lens);
         const lensIndex = lenses.indexOf(lens);
         setIsSelectedLens(lensIndex);
-        console.log(
-          "THIS IS REAL LENS RESULT",
-          lens,
-          "THIS IS REAL LENS RESULT"
-        );
-        console.log("APPLIED!");
+        console.log(lens);
       });
       Lenses.current[index].current = div;
     });
     setLenses(lenses);
-    console.log(lenses);
-    console.log(session);
-
-    const track = document.querySelector(".selectLens");
-    const track2 = document.getElementsByClassName(".selectLens");
-    // have access to it
-    console.log(track, "IS GET ELEMENTS BY ID ???", track2.length);
-    // });
   };
-  document.addEventListener("DOMContentLoaded", () => {
-    const selectLensElements = Array.from(
-      document.getElementsByClassName("selectLens")
-    );
-    console.log("XXXTEN", selectLensElements);
-  });
 
   const startRecording = () => {
     mediaRecorderRef.current.start();
     setRecording(true);
-    console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
     }, 16000);
@@ -220,10 +176,7 @@ const CameraKit = () => {
   };
 
   const [remainingTime, setRemainingTime] = useState(15);
-  const track = document.querySelector(".selectLens");
-  const track2 = document.getElementsByClassName(".selectLens");
-  // have access to it
-  console.log(track, "IS IT WORKING ???", track2.length);
+
   const handleClick = () => {
     if (show) {
       setShow(false);
@@ -265,7 +218,6 @@ const CameraKit = () => {
                 direction="vertical"
                 slidesPerView={3}
                 onSwiper={(s) => {
-                  console.log("initialize swiper", s);
                   setSwiper(s);
                 }}
                 className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
@@ -276,7 +228,7 @@ const CameraKit = () => {
                       className="selectLens"
                       id={lens.id}
                       key={lens.id}
-                      onClick={() => console.log("WTF")}
+                      onClick={() => console.log("Applying")}
                     >
                       <img
                         src={lens.iconUrl}
