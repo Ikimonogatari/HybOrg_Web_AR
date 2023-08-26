@@ -148,30 +148,21 @@ const CameraKit = () => {
   };
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
-    const element = document.getElementById("big-div");
-
-    if (element) {
-      console.log("at least the items loaded", element);
-      const test = document.querySelectorAll(".selectLens");
-      console.log("is test here ?", test);
-      const selectLens = document.querySelectorAll(".selectLens");
-      console.log(selectLens);
-      selectLens.forEach((div) => {
-        div.addEventListener("click", () => {
-          const lensId = div.id;
-          const lens = lenses.find((lens) => lens.id === lensId);
-          if (lens) session.applyLens(lens);
-          const lensIndex = lenses.indexOf(lens);
-          setIsSelectedLens(lensIndex);
-          console.log(lens);
-          console.log("APPLIED!");
-        });
+    const selectLens = document.querySelectorAll(".selectLens");
+    console.log(selectLens);
+    selectLens.forEach((div) => {
+      div.addEventListener("click", () => {
+        const lensId = div.id;
+        const lens = lenses.find((lens) => lens.id === lensId);
+        if (lens) session.applyLens(lens);
+        const lensIndex = lenses.indexOf(lens);
+        setIsSelectedLens(lensIndex);
+        console.log(lens);
+        console.log("APPLIED!");
       });
-    }
+    });
   };
   useEffect(() => {
-    const element = document.getElementById("big-div");
-    console.log("at least the items loaded", element);
     const div = document.querySelectorAll(".selectLens");
     console.log("FUTSUU", div);
     document.addEventListener("DOMContentLoaded", (event) => {
@@ -221,7 +212,7 @@ const CameraKit = () => {
       >
         <img
           src="/greyLogo.png"
-          className="selectLens absolute mx-auto top-14"
+          className="absolute mx-auto top-14"
           alt="logo"
         />
         <div
@@ -231,9 +222,8 @@ const CameraKit = () => {
         >
           <canvas ref={canvasRef} className={`w-screen h-screen`}></canvas>
           {!recording ? (
-            <div className="selectLens bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
+            <div className="bg-transparent absolute bottom-50% right-6 xl:right-[200px]">
               <Swiper
-                id="big-div"
                 modules={[Navigation, Pagination, Scrollbar]}
                 spaceBetween={10}
                 direction="vertical"
@@ -246,12 +236,15 @@ const CameraKit = () => {
                 {lenses.map((lens, index) => (
                   <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>
                     <div
+                      class="selectLens"
                       className="selectLens"
                       id={lens.id}
                       key={lens.id}
                       onClick={() => console.log("Clicked")}
                     >
                       <img
+                        class="selectLens"
+                        id={lens.id}
                         src={lens.iconUrl}
                         alt={lens.name}
                         className={
