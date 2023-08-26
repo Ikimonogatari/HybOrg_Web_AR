@@ -210,7 +210,7 @@ const CameraKit = () => {
               <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                 <select
                   ref={SnapLenses}
-                  className="appearance-none bg-transparent text-[10px] text-white"
+                  className="appearance-none bg-transparent text-[10px] text-black"
                 ></select>
               </div>
             </div>
@@ -221,7 +221,7 @@ const CameraKit = () => {
                 <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                   <select
                     ref={DeviceCameraType}
-                    className="appearance-none bg-transparent text-[10px] text-white"
+                    className="appearance-none bg-transparent text-[10px] text-black"
                   ></select>
                 </div>
               </div>
