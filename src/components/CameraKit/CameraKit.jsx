@@ -152,7 +152,7 @@ const CameraKit = () => {
 
     if (element) {
       console.log("at least the items loaded", element);
-      const test = document.querySelectorAll(".test");
+      const test = document.querySelectorAll(".selectLens");
       console.log("is test here ?", test);
       const selectLens = document.querySelectorAll(".selectLens");
       console.log(selectLens);
