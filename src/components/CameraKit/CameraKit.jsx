@@ -241,7 +241,7 @@ const CameraKit = () => {
                       class="selectLens"
                       id={lens.id}
                       key={lens.id}
-                      onClick={() => console.log("WTF")}
+                      onClick={() => console.log("Clicked")}
                     >
                       <img
                         src={lens.iconUrl}
