@@ -147,10 +147,13 @@ const CameraKit = () => {
     });
   };
   // snapchat lens songoh function
+  const myElementRef = useRef(null);
   const attachLensesToSelect = async (lenses, session) => {
-    const element = document.getElementById("lens-div");
-    if (element) {
-      console.log("WTF");
+    if (myElementRef.current) {
+      const innerHtml = myElementRef.current.innerHTML;
+      const id = myElementRef.current.id;
+      console.log("element is valid", id);
+      console.log("inner html", innerHtml);
       const selectLens = document.querySelectorAll(".selectLens");
       console.log(selectLens);
       selectLens.forEach((div) => {
@@ -230,7 +233,7 @@ const CameraKit = () => {
                 onSwiper={(s) => {
                   setSwiper(s);
                 }}
-                id="lens-div"
+                ref={myElementRef}
                 className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
               >
                 {lenses.map((lens, index) => (
