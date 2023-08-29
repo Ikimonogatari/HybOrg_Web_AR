@@ -268,11 +268,10 @@ const CameraKit = () => {
               } px-7 flex flex-col gap-10 justify-center items-center`}
             >
               <div className="absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center">
-                <img src="Frame.png" className="w-[92px] h-[26px]" alt="" />
                 <button
                   onClick={() => (setShow1(false), window.location.reload())}
                 >
-                  <img src="Fab.png" className="w-10 h-10" alt="" />
+                  <img src="Fab.png" className="w-10 h-10" alt="mr-0" />
                 </button>
               </div>
               <span className="text-white font-bold text-center text-2xl ">
