@@ -193,11 +193,7 @@ const CameraKit = () => {
         id="lit"
         className={`relative h-screen w-full mx-auto bg-black sm:bg-inherit flex justify-center`}
       >
-        <img
-          src="/greyLogo.png"
-          className="absolute mx-auto top-14"
-          alt="logo"
-        />
+        <img src="/greyLogo.png" className="absolute mx-auto top-14" alt="" />
         <div
           className={`${
             show1 ? "hidden" : "block"
@@ -222,7 +218,7 @@ const CameraKit = () => {
                   <img
                     src="blackButton.png"
                     className="w-[90px] h-[90px] bg-transparent rounded-full"
-                    alt="button"
+                    alt=""
                   />
                 </button>
               </div>
@@ -232,7 +228,7 @@ const CameraKit = () => {
               <img
                 src="timerBg1.png"
                 className="absolute bg-transparent w-[90px] h-[90px]"
-                alt="timer"
+                alt=""
               />
               <div
                 className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
@@ -255,14 +251,14 @@ const CameraKit = () => {
                 <img
                   src="button2.png"
                   className="w-16 h-16 rounded-2xl bg-transparent"
-                  alt="button2"
+                  alt=""
                 />
               </button>
               <button onClick={handleClick1} className="">
                 <img
                   src="button1.png"
                   className="w-16 h-16 rounded-2xl bg-transparent"
-                  alt="button1"
+                  alt=""
                 />
               </button>
             </div>
@@ -272,15 +268,11 @@ const CameraKit = () => {
               } px-7 flex flex-col gap-10 justify-center items-center`}
             >
               <div className="absolute w-full px-7 bg-transparent h-auto top-5 flex justify-between items-center">
-                <img
-                  src="Frame.png"
-                  className="w-[92px] h-[26px]"
-                  alt="frame"
-                />
+                <img src="Frame.png" className="w-[92px] h-[26px]" alt="" />
                 <button
                   onClick={() => (setShow1(false), window.location.reload())}
                 >
-                  <img src="Fab.png" className="w-10 h-10" alt="fab" />
+                  <img src="Fab.png" className="w-10 h-10" alt="" />
                 </button>
               </div>
               <span className="text-white font-bold text-center text-2xl ">
