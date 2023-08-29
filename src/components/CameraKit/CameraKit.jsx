@@ -60,7 +60,7 @@ const CameraKit = () => {
         console.log(file);
         upload({ file });
         setRecording(false);
-        setRemainingTime(15);
+        setRemainingTime(10);
       };
 
       mediaRecorderRef.current.ondataavailable = function (e) {
@@ -157,7 +157,7 @@ const CameraKit = () => {
     console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
-    }, 16000);
+    }, 11000);
     if (remainingTime > 0) {
       const timer = setInterval(() => {
         setRemainingTime((prevTime) => prevTime - 1);
@@ -169,7 +169,7 @@ const CameraKit = () => {
     }
   };
 
-  const [remainingTime, setRemainingTime] = useState(15);
+  const [remainingTime, setRemainingTime] = useState(10);
   const handleClick = () => {
     if (show) {
       setShow(false);
