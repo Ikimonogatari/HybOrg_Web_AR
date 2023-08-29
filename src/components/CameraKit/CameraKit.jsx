@@ -224,7 +224,7 @@ const CameraKit = () => {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center absolute bottom-5 rounded-full p-2 bg-transparent backdrop-blur-sm">
+            <div className="flex items-center justify-center absolute bottom-10 rounded-full p-2 bg-transparent backdrop-blur-sm">
               <img
                 src="timerBg1.png"
                 className="absolute bg-transparent w-[90px] h-[90px]"
