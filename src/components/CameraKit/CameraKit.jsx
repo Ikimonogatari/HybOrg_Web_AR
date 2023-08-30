@@ -13,6 +13,7 @@ const CameraKit = () => {
   const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadVideoMutation();
   const [recording, setRecording] = useState(false);
+  const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
 
@@ -150,11 +151,9 @@ const CameraKit = () => {
       });
     });
   };
-
   const startRecording = () => {
     mediaRecorderRef.current.start();
     setRecording(true);
-    console.log("Started Recording");
     setTimeout(() => {
       mediaRecorderRef.current.stop();
     }, 6000);
@@ -168,8 +167,24 @@ const CameraKit = () => {
       };
     }
   };
+  const startCounting = () => {
+    setCounting(true);
+    setTimeout(() => {
+      setCounting(false);
+      startRecording();
+    }, 3000);
+    if (remainingCount > 0) {
+      const count = setInterval(() => {
+        setRemainingCount((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => {
+        clearInterval(count);
+      };
+    }
+  };
 
   const [remainingTime, setRemainingTime] = useState(5);
+  const [remainingCount, setRemainingCount] = useState(3);
   const handleClick = () => {
     if (show) {
       setShow(false);
@@ -203,40 +218,46 @@ const CameraKit = () => {
           {!recording ? (
             <RenderLenses lenses={lenses} isSelectedLens={isSelectedLens} />
           ) : null}
-          {!recording ? (
-            <>
-              <div className="bg-transparent absolute bottom-20 left-7">
-                <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
-                  <select
-                    ref={DeviceCameraType}
-                    className="appearance-none bg-transparent text-[10px] text-white"
-                  ></select>
+          {!counting ? (
+            !recording ? (
+              <>
+                <div className="bg-transparent absolute bottom-20 left-7">
+                  <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+                    <select
+                      ref={DeviceCameraType}
+                      className="appearance-none bg-transparent text-[10px] text-white"
+                    ></select>
+                  </div>
                 </div>
+                <div className="mx-auto bg-transparent absolute bottom-10">
+                  <button onClick={startCounting}>
+                    <img
+                      src="blackButton.png"
+                      className="w-[90px] h-[90px] bg-transparent rounded-full"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center justify-center absolute bottom-10 rounded-full p-2 bg-transparent backdrop-blur-sm">
+                <img
+                  src="timerBg1.png"
+                  className="absolute bg-transparent w-[90px] h-[90px]"
+                  alt=""
+                />
+                <div
+                  className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
+                  role="status"
+                ></div>
+                <span className="text-white absolute bg-transparent font-bold text-3xl">
+                  {remainingTime}
+                </span>
               </div>
-              <div className="mx-auto bg-transparent absolute bottom-10">
-                <button onClick={startRecording}>
-                  <img
-                    src="blackButton.png"
-                    className="w-[90px] h-[90px] bg-transparent rounded-full"
-                    alt=""
-                  />
-                </button>
-              </div>
-            </>
+            )
           ) : (
-            <div className="flex items-center justify-center absolute bottom-10 rounded-full p-2 bg-transparent backdrop-blur-sm">
-              <img
-                src="timerBg1.png"
-                className="absolute bg-transparent w-[90px] h-[90px]"
-                alt=""
-              />
-              <div
-                className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
-                role="status"
-              ></div>
-              <span className="text-white absolute bg-transparent font-bold text-3xl">
-                {remainingTime}
-              </span>
+            <div className="bg-[#000000CC] w-full h-screen backdrop-blur-sm absolute z-50 flex items-center justify-center text-4xl font-semibold text-white">
+              {remainingCount}
             </div>
           )}
         </div>
