@@ -21,7 +21,7 @@ function RenderLenses({ lenses, isSelectedLens }) {
         onSwiper={(s) => {
           setSwiper(s);
         }}
-        className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[250px] bg-transparent"
+        className="swiper mr-0 flex flex-col justify-center items-end w-20 h-[260px] bg-transparent"
       >
         {lenses.map((lens, index) => (
           <SwiperSlide className={`w-20 rounded-full`} key={lens.id}>

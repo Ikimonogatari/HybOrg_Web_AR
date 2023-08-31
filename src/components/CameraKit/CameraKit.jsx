@@ -16,6 +16,7 @@ const CameraKit = () => {
   const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
+  const [isTurned, setIsTurned] = useState(false);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -95,10 +96,16 @@ const CameraKit = () => {
     });
     const source = createMediaStreamSource(video);
     await session.setSource(source);
+    if (!isTurned) {
+      source.setTransform(Transform2D.MirrorX);
+    } else {
+      source.setTransform(Transform2D.Identity);
+      console.log("updated mirror");
+    }
 
-    source.setTransform(Transform2D.MirrorX);
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
+
     source.setRenderSize(screenWidth, screenHeight);
     session.play();
   };
@@ -134,7 +141,9 @@ const CameraKit = () => {
       DeviceCameraType.current.appendChild(option);
     });
     DeviceCameraType.current.addEventListener("click", (event) => {
-      const deviceId = event.target.selectedOptions[0].value;
+      // const deviceId = event.target.selectedOptions[0].value;
+      const deviceId = session.cameras[2];
+      console.log(deviceId);
       setCameraKitSource(session, deviceId);
     });
   };
@@ -201,6 +210,13 @@ const CameraKit = () => {
       setShow1(true);
     }
   };
+  const handleCameraTurn = () => {
+    if (!isTurned) {
+      setIsTurned(true);
+    } else {
+      setIsTurned(false);
+    }
+  };
 
   return (
     <>
@@ -221,15 +237,18 @@ const CameraKit = () => {
           {!counting ? (
             !recording ? (
               <>
-                <div className="bg-transparent absolute bottom-20 left-7">
-                  <div className="px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+                <div className="bg-transparent absolute bottom-20 right-10">
+                  <button onClick={handleCameraTurn}>
+                    <img src="/turn.png" className="w-[52px] h-[52px]" alt="" />
+                  </button>
+                  <div className="hidden px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                     <select
                       ref={DeviceCameraType}
                       className="appearance-none bg-transparent text-[10px] text-white"
                     ></select>
                   </div>
                 </div>
-                <div className="mx-auto bg-transparent absolute bottom-10">
+                <div className="mx-auto bg-transparent absolute bottom-14">
                   <button onClick={startCounting}>
                     <img
                       src="blackButton.png"
