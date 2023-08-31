@@ -136,14 +136,14 @@ const CameraKit = () => {
     const cameras = devices.filter(({ kind }) => kind === "videoinput");
     cameras.forEach((camera) => {
       const option = document.createElement("option");
-      option.value = camera.deviceId;
-      option.text = camera.label;
+      // option.value = camera.deviceId;
+      // option.text = camera.label;
       DeviceCameraType.current.appendChild(option);
     });
     DeviceCameraType.current.addEventListener("click", (event) => {
       // const deviceId = event.target.selectedOptions[0].value;
       const deviceId = session.cameras[2];
-      console.log(deviceId);
+      console.log("changed camera", deviceId);
       setCameraKitSource(session, deviceId);
     });
   };
@@ -216,6 +216,7 @@ const CameraKit = () => {
     } else {
       setIsTurned(false);
     }
+    console.log("changed");
   };
 
   return (
@@ -238,7 +239,7 @@ const CameraKit = () => {
             !recording ? (
               <>
                 <div className="bg-transparent absolute bottom-20 right-10">
-                  <button onClick={handleCameraTurn}>
+                  <button ref={DeviceCameraType} onClick={handleCameraTurn}>
                     <img src="/turn.png" className="w-[52px] h-[52px]" alt="" />
                   </button>
                   <div className="hidden px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
