@@ -29,7 +29,7 @@ function RenderLenses({ lenses, isSelectedLens }) {
               id={lens.id}
               src={lens.iconUrl}
               alt={lens.name}
-              className={`selectLens
+              className={`selectLens transition-all
                         ${
                           isSelectedLens === index
                             ? `w-20 h-20 rounded-full cursor-pointer p-1 border-red-500 border-[1px] bg-transparent ml-auto`
