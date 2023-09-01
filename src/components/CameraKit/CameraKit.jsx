@@ -3,19 +3,21 @@ import { bootstrapCameraKit } from "@snap/camera-kit";
 import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
-import { useUploadVideoMutation } from "../../api";
+import { useUploadMutation } from "../../api";
 import RenderLenses from "../Lenses";
+import axios from "axios";
 
 let video;
 
 const CameraKit = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
-  const [upload, uploadResponse] = useUploadVideoMutation();
+  const [upload, uploadResponse] = useUploadMutation();
   const [recording, setRecording] = useState(false);
   const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -26,6 +28,8 @@ const CameraKit = () => {
     if (uploadResponse.isSuccess) {
       console.log("SUCCESS!!!");
       console.log(uploadResponse.data);
+      handleUpload(uploadResponse.data);
+
       const img = new Image();
       img.src = uploadResponse.data.qrImage;
       img.onload = () => {
@@ -34,6 +38,28 @@ const CameraKit = () => {
       setShow(true);
     }
   }, [uploadResponse]);
+  const handleUpload = async (data) => {
+    if (videoFile) {
+      const s3UploadUrl = data.signedUrl.url;
+      try {
+        const response = await axios.post(s3UploadUrl, videoFile, {
+          headers: {
+            "Content-Type": "video/mp4",
+            // `multipart/form-data`,
+          },
+        });
+
+        if (response.status === 200) {
+          console.log("File uploaded successfully");
+        } else {
+          console.error("File upload failed");
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        console.log("this is the video", videoFile);
+      }
+    }
+  };
   const canvasRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -57,7 +83,8 @@ const CameraKit = () => {
         const file = new File([blob], "video.mp4", { type: "video/mp4" });
         chunksRef.current = [];
         console.log(file);
-        upload({ file });
+        setVideoFile(file);
+        upload();
         setRecording(false);
         setRemainingTime(5);
       };

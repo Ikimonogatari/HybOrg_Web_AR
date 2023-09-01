@@ -10,23 +10,12 @@ export const hyborgApi = createApi({
   }),
   tagTypes: ["qrimage"],
   endpoints: (builder) => ({
-    uploadVideo: builder.mutation({
-      invalidatesTags: ["qrimage"],
-      query: (body) => {
-        const formData = new FormData();
-        if (body.file) {
-          formData.set("file", body.file);
-        }
-        return {
-          url: "/upload",
-          method: "POST",
-          prepareHeaders: (headers) => {
-            headers.set("Content-Type", "multipart/form-data");
-            return headers;
-          },
-          body: formData,
-        };
-      },
+    upload: builder.mutation({
+      query: (body) => ({
+        url: `/upload/generate-signed-url`,
+        method: "POST",
+        body,
+      }),
     }),
   }),
 });
@@ -37,4 +26,4 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(hyborgApi.middleware),
 });
-export const { useUploadVideoMutation } = hyborgApi;
+export const { useUploadMutation } = hyborgApi;
