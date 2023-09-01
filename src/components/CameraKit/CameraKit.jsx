@@ -16,7 +16,6 @@ const CameraKit = () => {
   const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
-  const [isTurned, setIsTurned] = useState(false);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -43,8 +42,6 @@ const CameraKit = () => {
   const CameraKitApi =
     "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNjg1NDI3NzE0LCJzdWIiOiIzNTAwZDQ3ZC1jNjQ5LTQ3OWYtYWQ5ZS0wNDMwODI4YTY1MmV-U1RBR0lOR340MDQwNmVlNC1mNTNhLTRkNTctOTljYi1iYTAyNzVjYjFjNTgifQ.gWIa_Mi5qJP0ZoOhBOo_p1eobtcuw17EQPLXoCT--c4";
   const lensGroupId = "55212fbf-a9dc-4286-8896-01bf0368a136";
-
-  const DeviceCameraType = useRef(null);
 
   useEffect(() => {
     const init = async () => {
@@ -96,13 +93,7 @@ const CameraKit = () => {
     });
     const source = createMediaStreamSource(video);
     await session.setSource(source);
-    if (!isTurned) {
-      source.setTransform(Transform2D.MirrorX);
-      console.log("turned");
-    } else {
-      source.setTransform(Transform2D.Identity);
-      console.log("turned");
-    }
+    source.setTransform(Transform2D.MirrorX);
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -206,13 +197,7 @@ const CameraKit = () => {
       setShow1(true);
     }
   };
-  const handleCameraTurn = () => {
-    if (!isTurned) {
-      setIsTurned(true);
-    } else {
-      setIsTurned(false);
-    }
-  };
+  const handleCameraTurn = () => {};
 
   return (
     <>
@@ -233,16 +218,10 @@ const CameraKit = () => {
           {!counting ? (
             !recording ? (
               <>
-                <div className="bg-transparent absolute bottom-20 right-10">
+                <div className="bg-transparent absolute bottom-[72px] right-10 xl:right-[200px]">
                   <button className="selectedCamera" onClick={handleCameraTurn}>
                     <img src="/turn.png" className="w-[52px] h-[52px]" alt="" />
                   </button>
-                  {/* <div className="hidden px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
-                    <select
-                      ref={DeviceCameraType}
-                      className="appearance-none bg-transparent text-[10px] text-white"
-                    ></select>
-                  </div> */}
                 </div>
                 <div className="mx-auto bg-transparent absolute bottom-14">
                   <div className="cursor-pointer" onClick={startCounting}>
