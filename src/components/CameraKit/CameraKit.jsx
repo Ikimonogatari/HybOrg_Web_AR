@@ -19,6 +19,7 @@ const CameraKit = () => {
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -26,13 +27,6 @@ const CameraKit = () => {
     }
     if (uploadResponse.isSuccess) {
       handleUpload(uploadResponse.data);
-
-      const img = new Image();
-      img.src = uploadResponse.data.qrImage;
-      img.onload = () => {
-        imageRef.current.src = img.src;
-      };
-      setShow(true);
     }
   }, [uploadResponse]);
   useEffect(() => {
@@ -45,6 +39,7 @@ const CameraKit = () => {
       img.onload = () => {
         imageRef.current.src = img.src;
       };
+      setIsLoading(false);
       setShow(true);
     }
   }, [qrResponse]);
@@ -92,6 +87,8 @@ const CameraKit = () => {
         upload();
         setRecording(false);
         setRemainingTime(15);
+        setRemainingCount(3);
+        setIsLoading(true);
       };
 
       mediaRecorderRef.current.ondataavailable = function (e) {
@@ -182,7 +179,7 @@ const CameraKit = () => {
     setRecording(true);
     setTimeout(() => {
       mediaRecorderRef.current.stop();
-    }, 16000);
+    }, 15000);
     if (remainingTime > 0) {
       const timer = setInterval(() => {
         setRemainingTime((prevTime) => prevTime - 1);
@@ -245,44 +242,55 @@ const CameraKit = () => {
           {!recording ? (
             <RenderLenses lenses={lenses} isSelectedLens={isSelectedLens} />
           ) : null}
-          {!counting ? (
-            !recording ? (
-              <>
-                <div className="bg-transparent absolute bottom-[72px] right-10 xl:right-[200px]">
-                  <button className="selectedCamera" onClick={handleCameraTurn}>
-                    <img src="/turn.png" className="w-[52px] h-[52px]" alt="" />
-                  </button>
-                </div>
-                <div className="mx-auto bg-transparent absolute bottom-14">
-                  <div className="cursor-pointer" onClick={startCounting}>
-                    <img
-                      src="blackButton.png"
-                      className="w-[90px] h-[90px] bg-transparent rounded-full"
-                      alt=""
-                    />
+          {!isLoading ? (
+            !counting ? (
+              !recording ? (
+                <>
+                  <div className="bg-transparent absolute bottom-[72px] right-10 xl:right-[200px]">
+                    <button
+                      className="selectedCamera"
+                      onClick={handleCameraTurn}
+                    >
+                      <img
+                        src="/turn.png"
+                        className="w-[52px] h-[52px]"
+                        alt=""
+                      />
+                    </button>
                   </div>
+                  <div className="mx-auto bg-transparent absolute bottom-14">
+                    <div className="cursor-pointer" onClick={startCounting}>
+                      <img
+                        src="blackButton.png"
+                        className="w-[90px] h-[90px] bg-transparent rounded-full"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-center absolute bottom-10 rounded-full p-2 bg-transparent backdrop-blur-sm">
+                  <img
+                    src="timerBg1.png"
+                    className="absolute bg-transparent w-[90px] h-[90px]"
+                    alt=""
+                  />
+                  <div
+                    className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
+                    role="status"
+                  ></div>
+                  <span className="text-white absolute bg-transparent font-bold text-3xl">
+                    {remainingTime}
+                  </span>
                 </div>
-              </>
+              )
             ) : (
-              <div className="flex items-center justify-center absolute bottom-10 rounded-full p-2 bg-transparent backdrop-blur-sm">
-                <img
-                  src="timerBg1.png"
-                  className="absolute bg-transparent w-[90px] h-[90px]"
-                  alt=""
-                />
-                <div
-                  className="bg-transparent inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-red-500 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s]"
-                  role="status"
-                ></div>
-                <span className="text-white absolute bg-transparent font-bold text-3xl">
-                  {remainingTime}
-                </span>
+              <div className="bg-[#000000CC] w-full h-screen backdrop-blur-sm absolute z-50 flex items-center justify-center text-4xl font-semibold text-white">
+                {remainingCount}
               </div>
             )
           ) : (
-            <div className="bg-[#000000CC] w-full h-screen backdrop-blur-sm absolute z-50 flex items-center justify-center text-4xl font-semibold text-white">
-              {remainingCount}
-            </div>
+            <div className="bg-[#000000CC] w-full h-screen backdrop-blur-sm absolute z-50 flex items-center justify-center text-4xl font-semibold text-white"></div>
           )}
         </div>
         {uploadResponse.isSuccess ? (
