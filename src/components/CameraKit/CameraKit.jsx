@@ -16,7 +16,6 @@ const CameraKit = () => {
   const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
   const [isSelectedLens, setIsSelectedLens] = useState(null);
-  const [isTurned, setIsTurned] = useState(false);
 
   useEffect(() => {
     if (uploadResponse.isError) {
@@ -96,11 +95,11 @@ const CameraKit = () => {
     });
     const source = createMediaStreamSource(video);
     await session.setSource(source);
-    if (!isTurned) {
-      source.setTransform(Transform2D.MirrorX);
-    } else {
-      source.setTransform(Transform2D.Identity);
-    }
+    // if (!isTurned) {
+    source.setTransform(Transform2D.MirrorX);
+    // } else {
+    // source.setTransform(Transform2D.Identity);
+    // }
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -133,24 +132,23 @@ const CameraKit = () => {
     // DeviceCameraType.current.innerHTML = "";
     const devices = await navigator.mediaDevices.enumerateDevices();
     const cameras = devices.filter(({ kind }) => kind === "videoinput");
+    let selectedCameraIndex = 0;
     // cameras.forEach((camera) => {
     // const button = document.createElement("button");
     // option.value = camera.deviceId;
     // option.text = camera.label;
     // DeviceCameraType.current.appendChild(button);
     // });
+
     const selectedCamera = document.querySelector(".selectedCamera");
     selectedCamera.addEventListener("click", (event) => {
       // const deviceId = event.target.selectedOptions[0].value;
-      if (!isTurned) {
-        const deviceId = cameras[0].deviceId;
-        setCameraKitSource(session, deviceId);
-        console.log("Front Camera");
-      } else {
-        const deviceId = cameras[0].deviceId;
-        setCameraKitSource(session, deviceId);
-        console.log("Back Camera");
-      }
+
+      selectedCameraIndex = (selectedCameraIndex + 1) % cameras.length;
+      const deviceId = cameras[selectedCameraIndex].deviceId;
+      console.log(deviceId);
+      setCameraKitSource(session, deviceId);
+      // console.log(cameras[selectedCameraIndex]);
     });
   };
 
@@ -217,14 +215,7 @@ const CameraKit = () => {
       setShow1(true);
     }
   };
-  const handleCameraTurn = () => {
-    if (!isTurned) {
-      setIsTurned(true);
-    } else {
-      setIsTurned(false);
-    }
-    console.log("changed");
-  };
+  const handleCameraTurn = () => {};
 
   return (
     <>
