@@ -3,7 +3,7 @@ import { bootstrapCameraKit } from "@snap/camera-kit";
 import { Transform2D } from "@snap/camera-kit";
 import { createMediaStreamSource } from "@snap/camera-kit";
 import "./CameraKit.css";
-import { useUploadMutation } from "../../api";
+import { useQrMutation, useUploadMutation } from "../../api";
 import RenderLenses from "../Lenses";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ const CameraKit = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [upload, uploadResponse] = useUploadMutation();
+  const [qr, qrResponse] = useQrMutation();
   const [recording, setRecording] = useState(false);
   const [counting, setCounting] = useState(false);
   const [lenses, setLenses] = useState([]);
@@ -21,13 +22,9 @@ const CameraKit = () => {
 
   useEffect(() => {
     if (uploadResponse.isError) {
-      console.log("ERROR!!!");
-      console.log(uploadResponse.error);
       window.location.reload();
     }
     if (uploadResponse.isSuccess) {
-      console.log("SUCCESS!!!");
-      console.log(uploadResponse.data);
       handleUpload(uploadResponse.data);
 
       const img = new Image();
@@ -38,25 +35,35 @@ const CameraKit = () => {
       setShow(true);
     }
   }, [uploadResponse]);
+  useEffect(() => {
+    if (qrResponse.isError) {
+      window.location.reload();
+    }
+    if (qrResponse.isSuccess) {
+      const img = new Image();
+      img.src = qrResponse.data.qrImage;
+      img.onload = () => {
+        imageRef.current.src = img.src;
+      };
+      setShow(true);
+    }
+  }, [qrResponse]);
   const handleUpload = async (data) => {
     if (videoFile) {
       const s3UploadUrl = data.signedUrl.url;
+      const uuid = data.signedUrl.uuid;
       try {
-        const response = await axios.post(s3UploadUrl, videoFile, {
+        const response = await axios.put(s3UploadUrl, videoFile, {
           headers: {
             "Content-Type": "video/mp4",
-            // `multipart/form-data`,
           },
         });
 
         if (response.status === 200) {
-          console.log("File uploaded successfully");
-        } else {
-          console.error("File upload failed");
+          qr({ uuid });
         }
       } catch (error) {
-        console.error("Error uploading file:", error);
-        console.log("this is the video", videoFile);
+        console.error(error);
       }
     }
   };
@@ -78,11 +85,9 @@ const CameraKit = () => {
       let videoStream = session.output.live.captureStream(30);
       mediaRecorderRef.current = new MediaRecorder(videoStream);
       mediaRecorderRef.current.onstop = function (e) {
-        console.log(chunksRef.current);
         let blob = new Blob(chunksRef.current, { type: "video/mp4" });
         const file = new File([blob], "video.mp4", { type: "video/mp4" });
         chunksRef.current = [];
-        console.log(file);
         setVideoFile(file);
         upload();
         setRecording(false);
@@ -91,8 +96,6 @@ const CameraKit = () => {
 
       mediaRecorderRef.current.ondataavailable = function (e) {
         chunksRef.current.push(e.data);
-        console.log("Pushing data");
-        console.log(e.data);
       };
 
       if (canvas) canvas.replaceWith(session.output.live);

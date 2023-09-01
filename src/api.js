@@ -17,6 +17,13 @@ export const hyborgApi = createApi({
         body,
       }),
     }),
+    qr: builder.mutation({
+      query: (body) => ({
+        url: `/upload/connect-file`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 export const store = configureStore({
@@ -26,4 +33,4 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(hyborgApi.middleware),
 });
-export const { useUploadMutation } = hyborgApi;
+export const { useUploadMutation, useQrMutation } = hyborgApi;
