@@ -100,7 +100,6 @@ const CameraKit = () => {
       source.setTransform(Transform2D.MirrorX);
     } else {
       source.setTransform(Transform2D.Identity);
-      console.log("updated mirror");
     }
 
     const screenWidth = window.innerWidth;
@@ -131,22 +130,30 @@ const CameraKit = () => {
   }, []);
   //camera songoh function
   const attachCamerasToSelect = async (session) => {
-    DeviceCameraType.current.innerHTML = "";
+    // DeviceCameraType.current.innerHTML = "";
     const devices = await navigator.mediaDevices.enumerateDevices();
     const cameras = devices.filter(({ kind }) => kind === "videoinput");
-    cameras.forEach((camera) => {
-      const option = document.createElement("option");
-      // option.value = camera.deviceId;
-      // option.text = camera.label;
-      DeviceCameraType.current.appendChild(option);
-    });
-    DeviceCameraType.current.addEventListener("click", (event) => {
+    // cameras.forEach((camera) => {
+    // const button = document.createElement("button");
+    // option.value = camera.deviceId;
+    // option.text = camera.label;
+    // DeviceCameraType.current.appendChild(button);
+    // });
+    const selectedCamera = document.querySelector(".selectedCamera");
+    selectedCamera.addEventListener("click", (event) => {
       // const deviceId = event.target.selectedOptions[0].value;
-      const deviceId = session.cameras[2];
-      console.log("changed camera", deviceId);
-      setCameraKitSource(session, deviceId);
+      if (!isTurned) {
+        const deviceId = cameras[0].deviceId;
+        setCameraKitSource(session, deviceId);
+        console.log("Front Camera");
+      } else {
+        const deviceId = cameras[0].deviceId;
+        setCameraKitSource(session, deviceId);
+        console.log("Back Camera");
+      }
     });
   };
+
   // snapchat lens songoh function
   const attachLensesToSelect = async (lenses, session) => {
     const selectLens = document.querySelectorAll(".selectLens");
@@ -239,24 +246,24 @@ const CameraKit = () => {
             !recording ? (
               <>
                 <div className="bg-transparent absolute bottom-20 right-10">
-                  <button ref={DeviceCameraType} onClick={handleCameraTurn}>
+                  <button className="selectedCamera" onClick={handleCameraTurn}>
                     <img src="/turn.png" className="w-[52px] h-[52px]" alt="" />
                   </button>
-                  <div className="hidden px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
+                  {/* <div className="hidden px-2 py-2 flex items-center gap-1 w-auto rigth-10 sm:w-auto  rounded-3xl bg-[#CD515266] text-white">
                     <select
                       ref={DeviceCameraType}
                       className="appearance-none bg-transparent text-[10px] text-white"
                     ></select>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mx-auto bg-transparent absolute bottom-14">
-                  <button onClick={startCounting}>
+                  <div className="cursor-pointer" onClick={startCounting}>
                     <img
                       src="blackButton.png"
                       className="w-[90px] h-[90px] bg-transparent rounded-full"
                       alt=""
                     />
-                  </button>
+                  </div>
                 </div>
               </>
             ) : (
