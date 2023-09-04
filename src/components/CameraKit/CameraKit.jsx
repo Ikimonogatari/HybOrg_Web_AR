@@ -131,17 +131,17 @@ const CameraKit = () => {
   useEffect(() => {
     const enumerateDevices = async () => {
       if (!navigator.mediaDevices?.enumerateDevices) {
-        console.log("enumerateDevices() not supported.");
+        // console.log("enumerateDevices() not supported.");
       } else {
         try {
           const devices = await navigator.mediaDevices.enumerateDevices();
           devices.forEach((device) => {
-            console.log(
-              `${device.kind}: ${device.label} id = ${device.deviceId}`
-            );
+            // console.log(
+            //   `${device.kind}: ${device.label} id = ${device.deviceId}`
+            // );
           });
         } catch (err) {
-          console.error(`${err.name}: ${err.message}`);
+          // console.error(`${err.name}: ${err.message}`);
         }
       }
     };
